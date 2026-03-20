@@ -9,22 +9,22 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 :root {
-  --bg: #0e0f11;
-  --bg2: #16181c;
-  --bg3: #1e2026;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #f0f0f0;
-  --text2: #8a8f9a;
-  --text3: #555a66;
-  --green: #00c97a;
-  --green-bg: rgba(0,201,122,0.1);
-  --yellow: #f5a623;
-  --yellow-bg: rgba(245,166,35,0.1);
-  --red: #ff4d4d;
-  --red-bg: rgba(255,77,77,0.1);
-  --blue: #4d9fff;
-  --blue-bg: rgba(77,159,255,0.1);
+  --bg: #f5f6f8;
+  --bg2: #ffffff;
+  --bg3: #f0f1f4;
+  --border: rgba(0,0,0,0.07);
+  --border2: rgba(0,0,0,0.13);
+  --text: #1a1d23;
+  --text2: #4a5060;
+  --text3: #9098aa;
+  --green: #0a8a52;
+  --green-bg: rgba(10,138,82,0.08);
+  --yellow: #c47d0a;
+  --yellow-bg: rgba(196,125,10,0.08);
+  --red: #d63030;
+  --red-bg: rgba(214,48,48,0.08);
+  --blue: #1a6fd4;
+  --blue-bg: rgba(26,111,212,0.08);
   --font: 'IBM Plex Sans', sans-serif;
   --mono: 'IBM Plex Mono', monospace;
 }
@@ -35,7 +35,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 .shell { display: flex; min-height: 100vh; }
 .sidebar {
   width: 200px; min-height: 100vh; background: var(--bg2);
-  border-right: 1px solid var(--border); padding: 0;
+  border-right: 1px solid var(--border2); padding: 0;
   display: flex; flex-direction: column; flex-shrink: 0;
   position: fixed; top: 0; left: 0; height: 100vh; z-index: 100;
 }
@@ -517,14 +517,14 @@ function renderDiario(){
   const activos=st.v.map(v=>v>0?v:null);
   cD=new Chart(document.getElementById('cDaily'),{type:'bar',
     data:{labels:labs,datasets:[
-      {data:activos,backgroundColor:activos.map((s,i)=>s==null?'rgba(255,255,255,0.04)':s>=targetDia[i]?'rgba(0,201,122,0.7)':'rgba(255,77,77,0.65)'),borderRadius:3,order:2},
-      {data:targetDia,type:'line',borderColor:'rgba(77,159,255,0.6)',borderWidth:1.5,pointRadius:0,fill:false,tension:0,order:1}
+      {data:activos,backgroundColor:activos.map((s,i)=>s==null?'rgba(255,255,255,0.04)':s>=targetDia[i]?'rgba(10,138,82,0.75)':'rgba(214,48,48,0.65)'),borderRadius:3,order:2},
+      {data:targetDia,type:'line',borderColor:'rgba(26,111,212,0.5)',borderWidth:1.5,pointRadius:0,fill:false,tension:0,order:1}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw?fmtM(c.raw):'sin datos'},backgroundColor:'#1e2026',borderColor:'rgba(255,255,255,0.1)',borderWidth:1}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw?fmtM(c.raw):'sin datos'},backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1}},
       scales:{
-        x:{ticks:{color:'#555a66',font:{size:9},autoSkip:false,maxRotation:60},grid:{color:'rgba(255,255,255,0.03)'}},
-        y:{ticks:{callback:v=>fmtM(v),color:'#555a66',font:{size:9}},grid:{color:'rgba(255,255,255,0.05)'}}
+        x:{ticks:{color:'#9098aa',font:{size:9},autoSkip:false,maxRotation:60},grid:{color:'rgba(0,0,0,0.05)'}},
+        y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:9}},grid:{color:'rgba(0,0,0,0.06)'}}
       }
     }
   });
@@ -569,8 +569,8 @@ function renderSemanas(){
       {label:'Obj 22%',data:ws.map(()=>22),borderColor:'rgba(77,159,255,0.35)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2026',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.dataset.label+': '+c.raw+'%':'sin datos'}}},
-      scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#555a66',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555a66',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.dataset.label+': '+c.raw+'%':'sin datos'}}},
+      scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
   document.getElementById('cKpi')._ch=ch;
@@ -594,8 +594,8 @@ function renderAnual(){
       {label:'Real 2026',data:r26,borderColor:'#00c97a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#00c97a',fill:false,tension:0.3,spanGaps:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2026',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+fmtM(c.raw)}}},
-      scales:{y:{ticks:{callback:v=>fmtM(v),color:'#555a66',font:{size:10}},grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555a66',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+fmtM(c.raw)}}},
+      scales:{y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
   document.getElementById('cAnual')._ch=ca;
@@ -604,8 +604,8 @@ function renderAnual(){
   const cb=new Chart(document.getElementById('cPresup'),{type:'bar',
     data:{labels:ms,datasets:[{data:pb,backgroundColor:pb.map(p=>p==null?'rgba(255,255,255,0.04)':p>=100?'rgba(0,201,122,0.7)':p>=85?'rgba(245,166,35,0.7)':'rgba(255,77,77,0.65)'),borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#1e2026',borderColor:'rgba(255,255,255,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.raw+'%':'n/d'}}},
-      scales:{y:{ticks:{callback:v=>v+'%',color:'#555a66',font:{size:10}},min:0,max:130,grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555a66',font:{size:11}},grid:{color:'rgba(255,255,255,0.04)'}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.raw+'%':'n/d'}}},
+      scales:{y:{ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},min:0,max:130,grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
   document.getElementById('cPresup')._ch=cb;
