@@ -335,6 +335,8 @@ async function cargarSheets(){
     const d1 = await fetchGviz(GID_D);
     const cols1 = d1.table.cols.map(c=>(c.label||c.id).toLowerCase().trim());
     const rows1 = d1.table.rows||[];
+    // Debug: log first row to see date format
+    if(rows1.length>0&&rows1[0].c&&rows1[0].c[0]) console.log('DATE FORMAT:', JSON.stringify(rows1[0].c[0]));
     const MMAP={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11,ene:0,abr:3,ago:7,set:8,dic:11};
     function parseDate(raw){
       if(!raw) return null;
