@@ -621,13 +621,37 @@ function renderAnual(){
   document.getElementById('cPresup')._ch=cb;
 }
 
-function guardarDia(){
-  const d=parseInt(document.getElementById('in-fecha').value.split('-')[2]);
-  const v=parseFloat(document.getElementById('in-ventas').value);
-  const c=parseFloat(document.getElementById('in-cuentas').value);
-  if(!d||!v){alert('Ingresa fecha y ventas');return}
+async function callSheets(params){
+  const gsUrl = APPS_SCRIPT_URL + '?' + Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
+  const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(gsUrl);
+  try{
+    const r = await fetch(proxyUrl);
+    const d = await r.json();
+    const result = JSON.parse(d.contents);
+    console.log('Sheets response:', result);
+    return result;
+  }catch(e){
+    console.error('Sheets error:', e);
+    return {status:'error'};
+  }
+}
+
+async function guardarDia(){
+  const fechaRaw = document.getElementById('in-fecha').value;
+  const v = parseFloat(document.getElementById('in-ventas').value);
+  const c = parseFloat(document.getElementById('in-cuentas').value);
+  if(!fechaRaw||!v){alert('Ingresa fecha y ventas');return}
+  const d = parseInt(fechaRaw.split('-')[2]);
   st.v[d-1]=v; if(c) st.c[d-1]=c;
-  render(); alert('¡Guardado!');
+  render();
+  const btn = document.querySelector('#tab-input .btn');
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  const parts = fechaRaw.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const fechaFmt = `${parseInt(parts[2])}-${months[parseInt(parts[1])-1]}-${parts[0]}`;
+  const res = await callSheets({type:'diario', fecha:fechaFmt, ventas:v, cuentas:c||0});
+  btn.textContent = res.status==='ok' ? '¡Guardado en Sheets!' : 'Error — revisa conexión';
+  setTimeout(()=>{btn.textContent='Guardar día';btn.disabled=false;},2500);
 }
 async function guardarSemana(){
   const w=parseInt(document.getElementById('in-sem').value);
