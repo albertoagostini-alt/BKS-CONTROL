@@ -643,8 +643,9 @@ async function guardarSemana(){
   try {
     await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
+      mode: 'no-cors',
       body: JSON.stringify({type:'semanal', semana:`2026-W${String(w).padStart(2,'0')}`, liq:l, sol:s, otros:o, rrhh:r}),
-      headers: {'Content-Type': 'application/json'}
+      headers: {'Content-Type': 'text/plain'}
     });
     btn.textContent = '¡Guardado en Sheets!';
     setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2000);
