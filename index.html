@@ -640,19 +640,9 @@ async function guardarSemana(){
   const btns = document.querySelectorAll('#tab-input .btn');
   const btn = btns[btns.length-1];
   btn.textContent = 'Guardando...'; btn.disabled = true;
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({type:'semanal', semana:`2026-W${String(w).padStart(2,'0')}`, liq:l, sol:s, otros:o, rrhh:r}),
-      headers: {'Content-Type': 'text/plain'}
-    });
-    btn.textContent = '¡Guardado en Sheets!';
-    setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2000);
-  } catch(err) {
-    btn.textContent = 'Guardado local (Sheets offline)';
-    setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2500);
-  }
+  await postToSheets({type:'semanal', semana:`2026-W${String(w).padStart(2,'0')}`, liq:l, sol:s, otros:o, rrhh:r});
+  btn.textContent = '¡Guardado en Sheets!';
+  setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2000);
 }
 
 function go(id){
