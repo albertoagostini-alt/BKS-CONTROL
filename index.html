@@ -675,9 +675,29 @@ function go(id){
   document.getElementById('tab-'+id).classList.add('active');
   if(id==='anual') renderAnual();
   if(id==='semanas') renderSemanas();
+  if(id==='input') autoSuggestIngreso();
 }
 
-document.getElementById('in-fecha').valueAsDate=new Date(2026,2,19);
+// Auto-suggerisce il prossimo giorno e settimana mancanti
+function autoSuggestIngreso(){
+  // Prossimo giorno mancante
+  let lastDay = 0;
+  for(let i=0; i<st.v.length; i++) if(st.v[i]>0) lastDay=i;
+  const nextDay = Math.min(lastDay+1, 30);
+  const nextDate = new Date(2026, 2, nextDay+1);
+  document.getElementById('in-fecha').valueAsDate = nextDate;
+
+  // Prossima settimana mancante
+  const wNums = Object.keys(wMap).map(Number);
+  let lastWeekWithData = null;
+  for(const w of wNums){
+    const wd = st.w[w];
+    if(wd && ((wd.liq||0)+(wd.sol||0)+(wd.otros||0)+(wd.rrhh||0)) > 0) lastWeekWithData = w;
+  }
+  const nextWeek = lastWeekWithData ? Math.min(lastWeekWithData+1, wNums[wNums.length-1]) : wNums[0];
+  document.getElementById('in-sem').value = nextWeek;
+}
+autoSuggestIngreso();
 cargarSheets();
 </script>
 </body>
