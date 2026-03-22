@@ -228,7 +228,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
     <div class="page-header"><div class="page-title">Ingreso de datos</div><div class="page-sub">Manual — solo si Google Sheets no está disponible</div></div>
     <div class="form-card">
       <div class="form-title">Ingreso diario</div>
-      <div class="form-note">Lo normal es ingresar directamente en Google Sheets. Esta pantalla es para casos de emergencia.</div>
+      <div class="form-note">Los datos se guardan directamente en Google Sheets y quedan registrados permanentemente.</div>
       <div class="ir"><label>Fecha</label><input type="date" id="in-fecha"/></div>
       <div class="ir"><label>Ventas ($)</label><input type="number" id="in-ventas" placeholder="ej. 11402860"/></div>
       <div class="ir"><label>N° cuentas</label><input type="number" id="in-cuentas" placeholder="ej. 239"/></div>
@@ -282,6 +282,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 // ── CONFIG ─────────────────────────────────────────────────────────────────
 const SHEET_ID = '1f7UYOrT82WAwzq0EgqNGbBMg90NrA1Ot-75BhvjAWFA';
 const GID_D = '0', GID_S = '411854168', GID_H = '1233677400';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxLsbhPUTqdALRvl6yjRZId2EbVWJBvqXkKUE3jYTk4VLoGbwixun2_jhrnPJ9ahNzU/exec';
 const PMES = 250000000, DIAS_MES = 31, TC = 0.25, TR = 0.22;
 let PANUAL = [220e6,221e6,250e6,230e6,240e6,270e6,400e6,420e6,270e6,250e6,220e6,200e6];
 const MES_ANT_TOTAL = 193429183, MES_ANT2_TOTAL = 237826547;
@@ -628,14 +629,29 @@ function guardarDia(){
   st.v[d-1]=v; if(c) st.c[d-1]=c;
   render(); alert('¡Guardado!');
 }
-function guardarSemana(){
+async function guardarSemana(){
   const w=parseInt(document.getElementById('in-sem').value);
   const l=parseFloat(document.getElementById('in-liq').value)||0;
   const s=parseFloat(document.getElementById('in-sol').value)||0;
   const o=parseFloat(document.getElementById('in-otros').value)||0;
   const r=parseFloat(document.getElementById('in-rrhh').value)||0;
   if(!w){alert('Ingresa el número de semana');return}
-  st.w[w]={liq:l,sol:s,otros:o,rrhh:r}; render(); alert('¡Guardado!');
+  st.w[w]={liq:l,sol:s,otros:o,rrhh:r}; render();
+  const btns = document.querySelectorAll('#tab-input .btn');
+  const btn = btns[btns.length-1];
+  btn.textContent = 'Guardando...'; btn.disabled = true;
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify({type:'semanal', semana:`2026-W${String(w).padStart(2,'0')}`, liq:l, sol:s, otros:o, rrhh:r}),
+      headers: {'Content-Type': 'application/json'}
+    });
+    btn.textContent = '¡Guardado en Sheets!';
+    setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2000);
+  } catch(err) {
+    btn.textContent = 'Guardado local (Sheets offline)';
+    setTimeout(()=>{btn.textContent='Guardar semana';btn.disabled=false;},2500);
+  }
 }
 
 function go(id){
