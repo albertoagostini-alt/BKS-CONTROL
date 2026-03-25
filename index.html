@@ -697,23 +697,35 @@ function renderSemanas(){
     </tr>`;
   });
   document.getElementById('tabla-semanas').innerHTML=h;
-  const wPctC=ws.map((w,i)=>wV[i]>0?pct((st.w[w]?.liq||0)+(st.w[w]?.sol||0)+(st.w[w]?.otros||0),wV[i]):null);
-  const wPctR=ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.rrhh||0,wV[i]):null);
+  const wPctLiq  = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.liq||0,  wV[i]):null);
+  const wPctSol  = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.sol||0,  wV[i]):null);
+  const wPctOtros= ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.otros||0,wV[i]):null);
+  const wPctC    = ws.map((w,i)=>wV[i]>0?pct((st.w[w]?.liq||0)+(st.w[w]?.sol||0)+(st.w[w]?.otros||0),wV[i]):null);
+  const wPctR    = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.rrhh||0, wV[i]):null);
+
   document.getElementById('leg-kpi').innerHTML=`
-    <span class="leg-item"><span class="leg-line" style="background:var(--red)"></span>Costo %</span>
-    <span class="leg-item"><span class="leg-line" style="background:var(--blue)"></span>RRHH %</span>
-    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(255,77,77,0.4)"></span>Obj 25%</span>
-    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(77,159,255,0.4)"></span>Obj 22%</span>`;
+    <span class="leg-item"><span class="leg-line" style="background:#E24B4A"></span>Líquidos %</span>
+    <span class="leg-item"><span class="leg-line" style="background:#EF9F27"></span>Sólidos %</span>
+    <span class="leg-item"><span class="leg-line" style="background:#9C6FD6"></span>Otros %</span>
+    <span class="leg-item"><span class="leg-line" style="background:#378ADD"></span>RRHH %</span>
+    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(226,75,74,0.5)"></span>Obj 25%</span>
+    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(55,138,221,0.5)"></span>Obj 22%</span>`;
+
   if(document.getElementById('cKpi')._ch) document.getElementById('cKpi')._ch.destroy();
   const ch=new Chart(document.getElementById('cKpi'),{type:'line',
     data:{labels:ws.map(w=>'Sem '+w),datasets:[
-      {label:'Costo %',data:wPctC,borderColor:'#ff4d4d',backgroundColor:'rgba(255,77,77,0.05)',borderWidth:2,pointRadius:5,pointBackgroundColor:wPctC.map(p=>p===null?'transparent':p>25?'#ff4d4d':'#00c97a'),fill:true,tension:0.3,spanGaps:false},
-      {label:'RRHH %',data:wPctR,borderColor:'#4d9fff',backgroundColor:'rgba(77,159,255,0.04)',borderWidth:2,pointRadius:5,pointBackgroundColor:wPctR.map(p=>p===null?'transparent':p>22?'#ff4d4d':'#00c97a'),fill:true,tension:0.3,spanGaps:false},
-      {label:'Obj 25%',data:ws.map(()=>25),borderColor:'rgba(255,77,77,0.35)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false},
-      {label:'Obj 22%',data:ws.map(()=>22),borderColor:'rgba(77,159,255,0.35)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
+      {label:'Líquidos %', data:wPctLiq,  borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.06)', borderWidth:2,pointRadius:4,fill:true, tension:0.3,spanGaps:false},
+      {label:'Sólidos %',  data:wPctSol,  borderColor:'#EF9F27',backgroundColor:'rgba(239,159,39,0.06)',borderWidth:2,pointRadius:4,fill:true, tension:0.3,spanGaps:false},
+      {label:'Otros %',    data:wPctOtros,borderColor:'#9C6FD6',backgroundColor:'rgba(156,111,214,0.05)',borderWidth:2,pointRadius:4,fill:true, tension:0.3,spanGaps:false},
+      {label:'RRHH %',     data:wPctR,    borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.05)', borderWidth:2,pointRadius:4,fill:true, tension:0.3,spanGaps:false},
+      {label:'Obj 25%',data:ws.map(()=>25),borderColor:'rgba(226,75,74,0.4)', borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false},
+      {label:'Obj 22%',data:ws.map(()=>22),borderColor:'rgba(55,138,221,0.4)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.dataset.label+': '+c.raw+'%':'sin datos'}}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{
+        label:c=>c.raw!=null?c.dataset.label+': '+c.raw+'%':'\u2014',
+        afterBody:(items)=>{const idx=items[0]?.dataIndex;const tot=idx!=null?wPctC[idx]:null;return tot!=null?['─────','Total costo: '+tot+'%']:[];}
+      }}},
       scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
