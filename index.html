@@ -267,13 +267,22 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
     <div class="div"></div>
     <div class="sec" style="--sec-color:var(--green)">Mes — Marzo 2026</div>
     <div class="g4" id="kpi-mes"></div>
+    <div class="g3" id="kpi-mes2" style="margin-top:8px"></div>
     <div class="proj-cards" id="proyeccion"></div>
     <div class="div"></div>
     <div class="sec" style="--sec-color:var(--red)">KPI críticos — % sobre ventas reales</div>
     <div class="g2" id="kpi-criticos"></div>
     <div class="div"></div>
     <div class="sec" style="--sec-color:var(--text3)">Ventas diarias — Marzo 2026</div>
-    <div class="card"><div class="chart-wrap" style="height:180px"><canvas id="cDaily"></canvas></div></div>
+    <div class="card">
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:var(--text3);align-items:center">
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(10,138,82,0.75)"></span>Ventas ≥ obj</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(214,48,48,0.65)"></span>Ventas &lt; obj</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(26,111,212,0.5)"></span>Objetivo</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(196,125,10,0.8)"></span>Prom/cuenta →</span>
+      </div>
+      <div class="chart-wrap" style="height:180px"><canvas id="cDaily"></canvas></div>
+    </div>
   </div>
 
   <!-- INGRESO -->
@@ -289,7 +298,21 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
     </div>
     <div class="form-card">
       <div class="form-title">Ingreso semanal (cada domingo)</div>
-      <div class="ir"><label>Semana ISO</label><input type="number" id="in-sem" placeholder="ej. 13"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:var(--bg3);border-radius:8px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Semana ISO</div>
+          <div style="font-size:16px;font-weight:600;color:var(--blue)" id="sem-num">—</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Inicio</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text)" id="sem-ini">—</div>
+        </div>
+        <div style="background:var(--bg3);border-radius:8px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Fin</div>
+          <div style="font-size:13px;font-weight:500;color:var(--text)" id="sem-fin">—</div>
+        </div>
+      </div>
+      <div class="ir"><label>Semana ISO</label><input type="number" id="in-sem" placeholder="ej. 13" oninput="updateSemDates(this.value)"/></div>
       <div class="ir"><label>Compras Líquidos ($)</label><input type="number" id="in-liq"/></div>
       <div class="ir"><label>Compras Sólidos ($)</label><input type="number" id="in-sol"/></div>
       <div class="ir"><label>Compras Otros ($)</label><input type="number" id="in-otros"/></div>
@@ -456,6 +479,18 @@ async function cargarSheets(){
       }
     });
 
+    // Popola wDateMap con date inizio/fine settimana
+    rows2.forEach(row=>{
+      if(!row.c||!row.c[0]||!row.c[0].v) return;
+      const raw = row.c[0].v.toString().trim();
+      const match = raw.match(/W?(\d+)$/);
+      const w = match ? parseInt(match[1]) : parseInt(raw);
+      if(!w) return;
+      const iniRaw = row.c[1]?.f || row.c[1]?.v;
+      const finRaw = row.c[2]?.f || row.c[2]?.v;
+      if(iniRaw) wDateMap[w] = {ini: iniRaw.toString().split('T')[0], fin: finRaw ? finRaw.toString().split('T')[0] : '—'};
+    });
+
     const now = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
     dot.className = 'sync-dot ok';
     time.textContent = now;
@@ -517,21 +552,31 @@ function render(){
 
   // MES
   const totV=st.v.reduce((a,b)=>a+b,0);
-  const allLiq=Object.values(st.w).reduce((a,w)=>a+(w.liq||0),0);
-  const allSol=Object.values(st.w).reduce((a,w)=>a+(w.sol||0),0);
-  const allOtros=Object.values(st.w).reduce((a,w)=>a+(w.otros||0),0);
-  const allRRHH=Object.values(st.w).reduce((a,w)=>a+(w.rrhh||0),0);
+  // Solo settimane del mese corrente (definite in wMap)
+  const mesWeeks = Object.keys(wMap).map(Number);
+  const allLiq=mesWeeks.reduce((a,w)=>a+(st.w[w]?.liq||0),0);
+  const allSol=mesWeeks.reduce((a,w)=>a+(st.w[w]?.sol||0),0);
+  const allOtros=mesWeeks.reduce((a,w)=>a+(st.w[w]?.otros||0),0);
+  const allRRHH=mesWeeks.reduce((a,w)=>a+(st.w[w]?.rrhh||0),0);
   const totC=allLiq+allSol+allOtros;
   const pV=pct(totV,PMES),pC=pct(totC,totV),pR=pct(allRRHH,totV);
   const marg=totV-totC-allRRHH;
   const vs1=+(pct(totV,MES_ANT_TOTAL)-100).toFixed(1);
   const vs2=+(pct(totV,MES_ANT2_TOTAL)-100).toFixed(1);
 
+  // Totale cuentas e promedio del mese
+  const totCuentas = st.c.reduce((a,b)=>a+b,0);
+  const promMes = totCuentas ? Math.round(totV/totCuentas) : 0;
+
   document.getElementById('kpi-mes').innerHTML=`
     <div class="kpi"><div class="kpi-lbl">Ventas del mes</div><div class="kpi-val">${fmtM(totV)}</div><div class="kpi-sub">obj ${fmtM(PMES)}</div><div style="margin-top:6px">${pill("Feb'26",vs1)}${pill("Mar'25",vs2)}</div><span class="kpi-badge ${bc(clr(pV))}">${pV}%</span></div>
+    <div class="kpi"><div class="kpi-lbl">Cuentas / Promedio</div><div class="kpi-val">${totCuentas}</div><div class="kpi-sub">$${Math.round(promMes/1000)}k prom/cuenta</div></div>
+    <div class="kpi"><div class="kpi-lbl">Margen bruto</div><div class="kpi-val">${fmtM(marg)}</div><div class="kpi-sub">${pct(marg,totV).toFixed(1)}% del facturado</div></div>
+    <div class="kpi" style="display:none"></div>`;
+
+  document.getElementById('kpi-mes2').innerHTML=`
     <div class="kpi"><div class="kpi-lbl">Costo compras</div><div class="kpi-val">${fmtM(totC)}</div><div class="kpi-sub">${pC.toFixed(1)}% sobre ventas</div><span class="kpi-badge ${bc(clr(pC,true))}">${pC>0?(pC<=25?'OK':'ALTO'):'—'}</span></div>
-    <div class="kpi"><div class="kpi-lbl">RRHH del mes</div><div class="kpi-val">${fmtM(allRRHH)}</div><div class="kpi-sub">${pR.toFixed(1)}% sobre ventas</div><span class="kpi-badge ${bc(clr(pR,true))}">${pR>0?(pR<=22?'OK':'ALTO'):'—'}</span></div>
-    <div class="kpi"><div class="kpi-lbl">Margen bruto</div><div class="kpi-val">${fmtM(marg)}</div><div class="kpi-sub">${pct(marg,totV).toFixed(1)}% del facturado</div></div>`;
+    <div class="kpi"><div class="kpi-lbl">RRHH del mes</div><div class="kpi-val">${fmtM(allRRHH)}</div><div class="kpi-sub">${pR.toFixed(1)}% sobre ventas</div><span class="kpi-badge ${bc(clr(pR,true))}">${pR>0?(pR<=22?'OK':'ALTO'):'—'}</span></div>`;
 
   // PROYECCIÓN
   const diasPasados=st.v.filter(x=>x>0).length||1;
@@ -606,16 +651,19 @@ function renderDiario(){
   if(cD) cD.destroy();
   const labs=Array.from({length:31},(_,i)=>{const d=new Date(2026,2,i+1);return ['D','L','M','X','J','V','S'][d.getDay()]+(i+1)});
   const activos=st.v.map(v=>v>0?v:null);
+  const promDiario=st.v.map((v,i)=>v>0&&st.c[i]>0?Math.round(v/st.c[i]):null);
   cD=new Chart(document.getElementById('cDaily'),{type:'bar',
     data:{labels:labs,datasets:[
-      {data:activos,backgroundColor:activos.map((s,i)=>s==null?'rgba(255,255,255,0.04)':s>=targetDia[i]?'rgba(10,138,82,0.75)':'rgba(214,48,48,0.65)'),borderRadius:3,order:2},
-      {data:targetDia,type:'line',borderColor:'rgba(26,111,212,0.5)',borderWidth:1.5,pointRadius:0,fill:false,tension:0,order:1}
+      {data:activos,backgroundColor:activos.map((s,i)=>s==null?'rgba(255,255,255,0.04)':s>=targetDia[i]?'rgba(10,138,82,0.75)':'rgba(214,48,48,0.65)'),borderRadius:3,order:2,yAxisID:'y'},
+      {data:targetDia,type:'line',borderColor:'rgba(26,111,212,0.5)',borderWidth:1.5,pointRadius:0,fill:false,tension:0,order:1,yAxisID:'y'},
+      {label:'Prom/cuenta',data:promDiario,type:'line',borderColor:'rgba(196,125,10,0.8)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(196,125,10,0.8)',fill:false,tension:0.3,order:0,yAxisID:'y2',spanGaps:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw?fmtM(c.raw):'sin datos'},backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1}},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.datasetIndex===2?'$'+Math.round(c.raw/1000)+'k prom/cta':c.raw?fmtM(c.raw):'sin datos'},backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1}},
       scales:{
         x:{ticks:{color:'#9098aa',font:{size:9},autoSkip:false,maxRotation:60},grid:{color:'rgba(0,0,0,0.05)'}},
-        y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:9}},grid:{color:'rgba(0,0,0,0.06)'}}
+        y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:9}},grid:{color:'rgba(0,0,0,0.06)'}},
+        y2:{position:'right',ticks:{callback:v=>'$'+Math.round(v/1000)+'k',color:'rgba(196,125,10,0.7)',font:{size:9}},grid:{display:false}}
       }
     }
   });
@@ -719,6 +767,22 @@ async function guardarDia(){
   btn.textContent=res.status==='ok'?'¡Guardado en Sheets!':'Error — revisa conexión';
   setTimeout(()=>{btn.textContent='Guardar día';btn.disabled=false;autoSuggestIngreso();},2500);
 }
+// Legge date lun/dom dalla wMap per la settimana selezionata
+// wDateMap viene popolato durante il caricamento da Input_Semanal
+const wDateMap = {};
+
+function updateSemDates(val){
+  const w = parseInt(val);
+  document.getElementById('sem-num').textContent = w || '—';
+  if(wDateMap[w]){
+    document.getElementById('sem-ini').textContent = wDateMap[w].ini;
+    document.getElementById('sem-fin').textContent = wDateMap[w].fin;
+  } else {
+    document.getElementById('sem-ini').textContent = '—';
+    document.getElementById('sem-fin').textContent = '—';
+  }
+}
+
 async function callSheets(params){
   const gsUrl = APPS_SCRIPT_URL + '?' + Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
   try{
