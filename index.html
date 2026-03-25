@@ -553,11 +553,16 @@ function render(){
   // MES
   const totV=st.v.reduce((a,b)=>a+b,0);
   // Solo settimane del mese corrente (definite in wMap)
+  // Per RRHH escludi settimane parziali (meno di 5 giorni nel mese)
   const mesWeeks = Object.keys(wMap).map(Number);
+  const fullWeeks = mesWeeks.filter(w => {
+    const r = wMap[w];
+    return r ? (r[1] - r[0] + 1) >= 5 : false;
+  });
   const allLiq=mesWeeks.reduce((a,w)=>a+(st.w[w]?.liq||0),0);
   const allSol=mesWeeks.reduce((a,w)=>a+(st.w[w]?.sol||0),0);
   const allOtros=mesWeeks.reduce((a,w)=>a+(st.w[w]?.otros||0),0);
-  const allRRHH=mesWeeks.reduce((a,w)=>a+(st.w[w]?.rrhh||0),0);
+  const allRRHH=fullWeeks.reduce((a,w)=>a+(st.w[w]?.rrhh||0),0);
   const totC=allLiq+allSol+allOtros;
   const pV=pct(totV,PMES),pC=pct(totC,totV),pR=pct(allRRHH,totV);
   const marg=totV-totC-allRRHH;
