@@ -385,7 +385,7 @@ const st = {
 };
 
 // ── UTILS ──────────────────────────────────────────────────────────────────
-const fmtM = n => '$'+Math.round(n/1e6)+'M';
+const fmtM = n => '$'+(n/1e6).toFixed(1)+'M';
 const fmt  = n => '$'+Math.round(n).toLocaleString('es-CL');
 const pct  = (a,b) => b&&b>0 ? +(a/b*100).toFixed(1) : 0;
 const clr  = (p,inv=false) => inv?(p<=100?'green':p<=125?'yellow':'red'):(p>=100?'green':p>=85?'yellow':'red');
