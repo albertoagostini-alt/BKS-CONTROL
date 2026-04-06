@@ -488,7 +488,7 @@ function getLastDataIdx(m) {
 const wDateMap = {};
 
 // ── GOOGLE SHEETS ──────────────────────────────────────────────────────────
-function gvizUrl(gid){ return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`; }
+function gvizUrl(gid){ return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}&headers=1`; }
 
 async function fetchGviz(gid){
   const r = await fetch(gvizUrl(gid));
@@ -543,17 +543,20 @@ async function cargarSheets(){
 
     const d2 = await fetchGviz(GID_S);
     const rows2 = d2.table.rows||[];
-    rows2.forEach((row,rowIdx)=>{
+    rows2.forEach(row=>{
       if(!row.c||!row.c[0]||!row.c[0].v) return;
-      if(rowIdx < 8) console.log(`[W${rowIdx}]`, row.c.map((c,i)=>c?`[${i}]v=${c.v} f=${c.f}`:null).filter(Boolean).join(' | '));
-      const raw = row.c[0].v.toString().trim(); .v = valore numerico, .f = stringa formattata (es "$3,682,800")
-      // Se .v è null (celle con formato valuta) usa .f
+      const raw = row.c[0].v.toString().trim();
+      const match = raw.match(/W?(\d+)$/);
+      const w = match ? parseInt(match[1]) : parseInt(raw);
+      if(!w||!st.w[w]) return;
+      // gviz restituisce valori numerici in .v per celle con formato valuta
+      // Se .v è null (colonna vuota), usa .f (stringa formattata)
       const getCol = (idx) => {
         const cell = row.c[idx];
         if(!cell) return 0;
-        if(cell.v != null && typeof cell.v === 'number') return cell.v;
-        if(cell.f != null) return num(cell.f);
-        if(cell.v != null) return num(cell.v);
+        if(typeof cell.v === 'number') return cell.v;
+        if(cell.f) return num(cell.f);
+        if(cell.v) return num(cell.v);
         return 0;
       };
       st.w[w] = {
