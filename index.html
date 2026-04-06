@@ -492,11 +492,25 @@ const wDateMap = {};
 function gvizUrl(gid){ return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}&headers=1`; }
 
 async function fetchGviz(gid){
-  const r = await fetch(gvizUrl(gid));
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const txt = await r.text();
+  const url = gvizUrl(gid);
+  let txt = '';
+  // Prova diretta prima, poi proxy come fallback
+  try {
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    txt = await r.text();
+  } catch(e) {
+    // Fallback: usa corsproxy.io
+    try {
+      const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(url));
+      if(!r2.ok) throw new Error('Proxy HTTP '+r2.status);
+      txt = await r2.text();
+    } catch(e2) {
+      throw new Error('Connessione fallita: ' + e2.message);
+    }
+  }
   const match = txt.match(/google\.visualization\.Query\.setResponse\(([\s\S]*)\)/);
-  if(!match) throw new Error('Formato inválido');
+  if(!match) throw new Error('Formato risposta non valido — il foglio è pubblico?');
   return JSON.parse(match[1]);
 }
 
@@ -619,7 +633,14 @@ async function cargarSheets(){
   }catch(e){
     dot.className = 'sync-dot err';
     time.textContent = 'Error de conexión';
-    console.error(e);
+    console.error('[BKS] Error cargarSheets:', e.message, e);
+    // Mostra messaggio di errore dettagliato
+    const errMsg = e.message || e.toString();
+    if(errMsg.includes('pubblico') || errMsg.includes('Formato')) {
+      document.getElementById('sync-time').textContent = 'Foglio non pubblico?';
+    } else if(errMsg.includes('Failed to fetch') || errMsg.includes('NetworkError')) {
+      document.getElementById('sync-time').textContent = 'No internet';
+    }
     render();
   }
 }
