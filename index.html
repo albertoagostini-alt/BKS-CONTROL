@@ -32,7 +32,6 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; min-height: 100vh; }
 
-/* LAYOUT */
 .shell { display: flex; min-height: 100vh; }
 .sidebar {
   width: 200px; min-height: 100vh; background: var(--bg2);
@@ -42,7 +41,6 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 }
 .main { margin-left: 210px; flex: 1; padding: 32px 36px; max-width: 1080px; }
 
-/* SIDEBAR */
 .logo {
   padding: 22px 20px 18px;
   border-bottom: 1px solid var(--border);
@@ -51,7 +49,6 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 }
 .logo-icon { width: 30px; height: 30px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .logo-icon span { font-size: 9px; font-weight: 700; color: white; letter-spacing: .03em; font-family: var(--mono); }
-.logo-text {}
 .logo-name { font-size: 14px; font-weight: 600; letter-spacing: .01em; color: var(--text); line-height: 1; }
 .logo-sub { font-size: 10px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
 .nav-item {
@@ -71,23 +68,19 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 .sync-btn { margin-top: 8px; width: 100%; padding: 7px; font-size: 12px; cursor: pointer; border: 1px solid var(--border2); border-radius: 8px; background: transparent; color: var(--text2); font-family: var(--font); transition: all .15s; letter-spacing: .01em; }
 .sync-btn:hover { background: var(--bg3); color: var(--text); }
 
-/* PANELS */
 .panel { display: none; }
 .panel.active { display: block; }
 
-/* PAGE HEADER */
 .page-header { margin-bottom: 24px; }
 .page-title { font-size: 21px; font-weight: 600; color: var(--text); letter-spacing: -.02em; }
 .page-sub { font-size: 12px; color: var(--text3); margin-top: 4px; font-family: var(--mono); }
 
-/* ALERTS */
 .alert { display: flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 9px; font-size: 12px; margin-bottom: 8px; border: 1px solid; font-weight: 400; }
 .alert-red { background: var(--red-bg); border-color: rgba(255,77,77,0.25); color: #ff8080; }
 .alert-yellow { background: var(--yellow-bg); border-color: rgba(245,166,35,0.25); color: #f5c060; }
 .alert-green { background: var(--green-bg); border-color: rgba(0,201,122,0.25); color: #00c97a; }
 .alert-icon { font-size: 14px; flex-shrink: 0; }
 
-/* GRIDS */
 .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
 .g3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px; }
 .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -132,7 +125,6 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   #kpi-criticos { grid-template-columns: 1fr; }
 }
 
-/* KPI CARDS */
 .kpi {
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden;
@@ -154,14 +146,12 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 .pill-up { background: var(--green-bg); color: var(--green); }
 .pill-dn { background: var(--red-bg); color: var(--red); }
 
-/* PROYECCIÓN */
 .proj-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
 .pj { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; }
 .pj-lbl { font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 .pj-main { font-size: 20px; font-weight: 600; margin: 4px 0; font-family: var(--mono); }
 .pj-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
 
-/* SECTION DIVIDER */
 .div { height: 1px; background: var(--border2); margin: 28px 0; }
 .sec {
   font-size: 11px; font-weight: 600; color: var(--text2);
@@ -179,11 +169,40 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   flex-shrink: 0;
 }
 
-/* CARDS */
 .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; margin-bottom: 16px; }
 .chart-wrap { position: relative; width: 100%; }
 
-/* KPI CRITICI */
+/* SCROLLABLE CHART */
+.chart-scroll-outer {
+  position: relative;
+  width: 100%;
+}
+.chart-scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  user-select: none;
+}
+.chart-scroll-container:active { cursor: grabbing; }
+.chart-scroll-container::-webkit-scrollbar { height: 5px; }
+.chart-scroll-container::-webkit-scrollbar-track { background: var(--bg3); border-radius: 3px; }
+.chart-scroll-container::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+.chart-scroll-inner { height: 200px; }
+
+/* Month nav pills */
+.month-nav {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; align-items: center;
+}
+.month-pill {
+  padding: 3px 10px; border-radius: 12px; font-size: 11px; cursor: pointer;
+  border: 1px solid var(--border2); color: var(--text3); font-family: var(--mono);
+  transition: all .15s; background: transparent;
+}
+.month-pill:hover { background: var(--bg3); color: var(--text2); }
+.month-pill.active { background: var(--blue); color: white; border-color: var(--blue); }
+.month-pill.past { color: var(--text3); }
+
 .kpi-bar-wrap { height: 5px; background: var(--bg3); border-radius: 3px; margin: 8px 0; overflow: hidden; }
 .kpi-bar { height: 100%; border-radius: 3px; transition: width .6s ease; }
 .kpi-crit-title { font-size: 13px; font-weight: 500; margin-bottom: 10px; color: var(--text); }
@@ -195,7 +214,6 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 .subcat-val { font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--mono); }
 .subcat-pct { font-size: 10px; color: var(--text3); margin-top: 2px; }
 
-/* TABLE */
 .wt { width: 100%; font-size: 12px; border-collapse: collapse; }
 .wt th { text-align: left; padding: 8px 10px; font-weight: 500; color: var(--text3); border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; }
 .wt td { padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--text2); }
@@ -203,12 +221,10 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 .wt tr:hover td { background: var(--bg3); }
 .wt td:first-child { font-weight: 500; color: var(--text); }
 
-/* LEGEND */
 .leg { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px; font-size: 11px; color: var(--text3); align-items: center; }
 .leg-item { display: flex; align-items: center; gap: 5px; }
 .leg-line { width: 20px; height: 2px; border-radius: 2px; display: inline-block; }
 
-/* INPUT FORM */
 .form-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 20px; margin-bottom: 16px; }
 .form-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .form-note { font-size: 11px; color: var(--text3); margin-bottom: 14px; }
@@ -228,7 +244,6 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 <body>
 <div class="shell">
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="logo">
     <div class="logo-icon"><span>BKS</span></div>
@@ -252,20 +267,19 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   </div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
 
   <!-- DASHBOARD -->
   <div class="panel active" id="tab-dashboard">
     <div class="page-header">
       <div class="page-title" id="page-title">Dashboard</div>
-      <div class="page-sub" id="page-sub">Abril 2026 — BKS</div>
+      <div class="page-sub" id="page-sub">BKS 2026</div>
     </div>
     <div id="alertas"></div>
     <div class="sec" id="sec-hoy" style="--sec-color:var(--blue)">Hoy</div>
     <div class="g4" id="kpi-hoy"></div>
     <div class="div"></div>
-    <div class="sec" style="--sec-color:var(--green)">Mes — Abril 2026</div>
+    <div class="sec" id="sec-mes" style="--sec-color:var(--green)">Mes actual</div>
     <div class="g4" id="kpi-mes"></div>
     <div class="g3" id="kpi-mes2" style="margin-top:8px"></div>
     <div class="proj-cards" id="proyeccion"></div>
@@ -273,15 +287,26 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
     <div class="sec" style="--sec-color:var(--red)">KPI críticos — % sobre ventas reales</div>
     <div class="g2" id="kpi-criticos"></div>
     <div class="div"></div>
-    <div class="sec" style="--sec-color:var(--text3)">Ventas diarias — Abril 2026</div>
+    <div class="sec" id="sec-diario" style="--sec-color:var(--text3)">Ventas diarias</div>
     <div class="card">
-      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:var(--text3);align-items:center">
+      <!-- Legend -->
+      <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px;font-size:11px;color:var(--text3);align-items:center">
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(10,138,82,0.75)"></span>Ventas ≥ obj</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(214,48,48,0.65)"></span>Ventas &lt; obj</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(150,150,160,0.4)"></span>Mes anterior</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(26,111,212,0.5)"></span>Objetivo</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(196,125,10,0.8)"></span>Prom/cuenta →</span>
       </div>
-      <div class="chart-wrap" style="height:180px"><canvas id="cDaily"></canvas></div>
+      <!-- Month nav pills -->
+      <div class="month-nav" id="month-nav"></div>
+      <!-- Scrollable chart -->
+      <div class="chart-scroll-outer">
+        <div class="chart-scroll-container" id="chart-scroll-container">
+          <div class="chart-scroll-inner" id="chart-scroll-inner">
+            <canvas id="cDaily"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -307,12 +332,12 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
           <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Inicio</div>
           <div style="font-size:13px;font-weight:500;color:var(--text)" id="sem-ini">—</div>
         </div>
-        <div style="background:var(--bg3);border-radius:8px;padding:8px;text-align:center">
+        <div style="background:var(--bg3);border-radius:08px;padding:8px;text-align:center">
           <div style="font-size:10px;color:var(--text3);margin-bottom:4px">Fin</div>
           <div style="font-size:13px;font-weight:500;color:var(--text)" id="sem-fin">—</div>
         </div>
       </div>
-      <div class="ir"><label>Semana ISO</label><input type="number" id="in-sem" placeholder="ej. 13" oninput="updateSemDates(this.value)"/></div>
+      <div class="ir"><label>Semana ISO</label><input type="number" id="in-sem" placeholder="ej. 15" oninput="updateSemDates(this.value)"/></div>
       <div class="ir"><label>Compras Líquidos ($)</label><input type="number" id="in-liq"/></div>
       <div class="ir"><label>Compras Sólidos ($)</label><input type="number" id="in-sol"/></div>
       <div class="ir"><label>Compras Otros ($)</label><input type="number" id="in-otros"/></div>
@@ -323,7 +348,12 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 
   <!-- SEMANAS -->
   <div class="panel" id="tab-semanas">
-    <div class="page-header"><div class="page-title">Resumen semanal</div><div class="page-sub">Abril 2026</div></div>
+    <div class="page-header">
+      <div class="page-title">Resumen semanal</div>
+      <div class="page-sub" id="semanas-sub">2026</div>
+    </div>
+    <!-- Month selector for semanas -->
+    <div class="month-nav" id="semanas-month-nav" style="margin-bottom:16px"></div>
     <div class="card" style="overflow-x:auto;margin-bottom:16px"><table class="wt" id="tabla-semanas"></table></div>
     <div class="sec">Evolución KPI críticos por semana</div>
     <div class="card">
@@ -359,33 +389,68 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 const SHEET_ID = '1f7UYOrT82WAwzq0EgqNGbBMg90NrA1Ot-75BhvjAWFA';
 const GID_D = '0', GID_S = '411854168', GID_H = '1233677400';
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxLsbhPUTqdALRvl6yjRZId2EbVWJBvqXkKUE3jYTk4VLoGbwixun2_jhrnPJ9ahNzU/exec';
-const PMES = 230000000, DIAS_MES = 30, TC = 0.25, TR = 0.22;
-let PANUAL = [220e6,221e6,250e6,230e6,240e6,270e6,400e6,420e6,270e6,250e6,220e6,200e6];
-const MES_ANT_TOTAL = 232000000, MES_ANT2_TOTAL = 214927080;
-// Settimane ISO Aprile 2026 (Lun–Dom)
-// Sem 14: Mié 1 Apr (chiude Mar, 1 giorno)
-// Sem 15: Lun 6 – Dom 12 Apr  (2–5 Apr esclusi se parziale, ma 6 giorni ok)
-// Sem 14: Mié 1 – Dom 5 Apr
-// Sem 15: Lun 6 – Dom 12 Apr
-// Sem 16: Lun 13 – Dom 19 Apr
-// Sem 17: Lun 20 – Dom 26 Apr
-// Sem 18: Lun 27 – Dom 30 Apr
-const wMap = {14:[1,5],15:[6,12],16:[13,19],17:[20,26],18:[27,30]};
-const wLabels = {14:'1–5 Abr',15:'6–12 Abr',16:'13–19 Abr',17:'20–26 Abr',18:'27–30 Abr'};
-const wTargets = {14:50e6,15:55e6,16:55e6,17:55e6,18:40e6};
+const TC = 0.25, TR = 0.22;
 
-function getTargetDia(d){ const dow=new Date(2026,3,d).getDay(); return [8,4.5,4.5,5.5,6.5,13,13][dow]*1e6; }
-const targetDia = Array.from({length:30},(_,i)=>getTargetDia(i+1));
+// Presupuesto mensual 2026 (hardcoded, Jan=0)
+const PANUAL = [220e6, 221e6, 250e6, 230e6, 240e6, 270e6, 400e6, 420e6, 270e6, 250e6, 220e6, 200e6];
+const MESES_NOMBRES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const MESES_CORTOS  = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+
+// Días por mes 2026
+const DIAS_MES_2026 = [31,28,31,30,31,30,31,31,30,31,30,31];
+
+// Target diario por día de semana (Dom=0..Sáb=6) en millones
+// Lun/Mar=4M, Mié=5M, Jue=7M, Vie=12M, Sáb=12M, Dom=8M
+function getTargetDia(year, month, day){
+  const dow = new Date(year, month, day).getDay();
+  return [8,4,4,5,7,12,12][dow] * 1e6;
+}
+
+// Semanas ISO del mes — calculadas dinámicamente
+// Retorna array de {w, firstDay, lastDay} donde firstDay/lastDay son días del mes (1-based)
+function getWeeksOfMonth(year, month) {
+  const weeks = [];
+  const daysInMonth = DIAS_MES_2026[month];
+  let seenWeeks = new Set();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const w = getISOWeek(new Date(year, month, d));
+    if (!seenWeeks.has(w)) {
+      seenWeeks.add(w);
+      weeks.push({w, firstDay: d, lastDay: d});
+    } else {
+      weeks[weeks.length-1].lastDay = d;
+    }
+  }
+  return weeks;
+}
+
+function getISOWeek(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+  return Math.ceil((((d - yearStart) / 86400000) + 1)/7);
+}
+
+// ── STATE ───────────────────────────────────────────────────────────────────
+// allData[month] = {v: Float32Array(31), c: Float32Array(31)}  (month 0-based)
+const allData = {};
+for (let m = 0; m < 12; m++) {
+  allData[m] = { v: new Array(DIAS_MES_2026[m]).fill(0), c: new Array(DIAS_MES_2026[m]).fill(0) };
+}
 
 const st = {
-  v: new Array(31).fill(0),
-  c: new Array(31).fill(0),
   w: Object.fromEntries(Array.from({length:53},(_,i)=>i+1).map(w=>[w,{liq:0,sol:0,otros:0,rrhh:0}])),
   hist: {}
 };
 
+// Current month being viewed in chart (0-based), default = current real month
+const today = new Date();
+let viewMonth = (today.getFullYear() === 2026) ? today.getMonth() : 3; // default Abril
+let semanasViewMonth = viewMonth;
+
 // ── UTILS ──────────────────────────────────────────────────────────────────
-const fmtM = n => '$'+(n/1e6).toFixed(1)+'M';
+const fmtM = n => '$'+Math.round(n/1e6)+'M';
 const fmt  = n => '$'+Math.round(n).toLocaleString('es-CL');
 const pct  = (a,b) => b&&b>0 ? +(a/b*100).toFixed(1) : 0;
 const clr  = (p,inv=false) => inv?(p<=100?'green':p<=125?'yellow':'red'):(p>=100?'green':p>=85?'yellow':'red');
@@ -398,10 +463,25 @@ function flecha(a,b){
   return `<span class="trend ${d>=0?'trend-up':'trend-dn'}">${d>=0?'↑':'↓'} ${d>=0?'+':''}${p}%</span>`;
 }
 function pill(lbl,v){ return `<span class="pill ${v>=0?'pill-up':'pill-dn'}">${v>=0?'↑':'↓'} ${v>=0?'+':''}${v}% ${lbl}</span>`; }
-function vSem(w){ const r=wMap[w]; return r?st.v.slice(r[0]-1,r[1]).reduce((a,b)=>a+b,0):0; }
-function getHoyIdx(){ let l=0; for(let i=0;i<st.v.length;i++) if(st.v[i]>0) l=i; return l; }
 
-// ── GOOGLE SHEETS via gviz ─────────────────────────────────────────────────
+function monthTotal(m) {
+  return (allData[m]?.v || []).reduce((a,b)=>a+b, 0);
+}
+function monthCuentasTotal(m) {
+  return (allData[m]?.c || []).reduce((a,b)=>a+b, 0);
+}
+
+// Last day index with data in a given month
+function getLastDataIdx(m) {
+  const v = allData[m]?.v || [];
+  let l = 0;
+  for (let i = 0; i < v.length; i++) if (v[i] > 0) l = i;
+  return l;
+}
+
+const wDateMap = {};
+
+// ── GOOGLE SHEETS ──────────────────────────────────────────────────────────
 function gvizUrl(gid){ return `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${gid}`; }
 
 async function fetchGviz(gid){
@@ -420,11 +500,10 @@ async function cargarSheets(){
   time.textContent = 'Sincronizando...';
   try{
     const d1 = await fetchGviz(GID_D);
-    const cols1 = d1.table.cols.map(c=>(c.label||c.id).toLowerCase().trim());
     const rows1 = d1.table.rows||[];
+
     function parseDate(raw){
       if(!raw) return null;
-      // Formato gviz: "Date(2026,0,1)" — anno, mese 0-based, giorno
       if(typeof raw==='string'){
         const mg=raw.match(/Date\((\d+),(\d+),(\d+)\)/);
         if(mg) return new Date(parseInt(mg[1]),parseInt(mg[2]),parseInt(mg[3]));
@@ -435,14 +514,24 @@ async function cargarSheets(){
       if(m2) return new Date(parseInt(m2[1]),parseInt(m2[2])-1,parseInt(m2[3]));
       const d=new Date(s); return isNaN(d)?null:d;
     }
-    st.v.fill(0); st.c.fill(0);
+
+    // Reset all monthly data
+    for (let m = 0; m < 12; m++) {
+      allData[m].v.fill(0);
+      allData[m].c.fill(0);
+    }
+
     rows1.forEach(row=>{
       if(!row.c||!row.c[0]||!row.c[0].v) return;
       const dt=parseDate(row.c[0].v);
       if(!dt||isNaN(dt)) return;
-      if(dt.getFullYear()===2026 && dt.getMonth()===3){
-        const day=dt.getDate()-1;
-        if(day>=0&&day<31){st.v[day]=num(row.c[1]?.v);st.c[day]=num(row.c[2]?.v);}
+      if(dt.getFullYear()===2026){
+        const m = dt.getMonth();
+        const day = dt.getDate()-1;
+        if(day>=0 && day < DIAS_MES_2026[m]){
+          allData[m].v[day] = num(row.c[1]?.v);
+          allData[m].c[day] = num(row.c[2]?.v);
+        }
       }
     });
 
@@ -451,11 +540,9 @@ async function cargarSheets(){
     rows2.forEach(row=>{
       if(!row.c||!row.c[0]||!row.c[0].v) return;
       const raw = row.c[0].v.toString().trim();
-      // Supporta sia "10" che "2026-W10" che "W10"
       const match = raw.match(/W?(\d+)$/);
       const w = match ? parseInt(match[1]) : parseInt(raw);
       if(!w||!st.w[w]) return;
-      // Colonne: Semana(0), FechaInicio(1), FechaFin(2), Liquidos(3), Solidos(4), Otros(5), RRHH(6)
       const hasDateCols = row.c.length >= 7;
       st.w[w] = {
         liq:  num(hasDateCols ? row.c[3]?.v : row.c[1]?.v),
@@ -463,6 +550,17 @@ async function cargarSheets(){
         otros:num(hasDateCols ? row.c[5]?.v : row.c[3]?.v),
         rrhh: num(hasDateCols ? row.c[6]?.v : row.c[4]?.v)
       };
+    });
+
+    rows2.forEach(row=>{
+      if(!row.c||!row.c[0]||!row.c[0].v) return;
+      const raw = row.c[0].v.toString().trim();
+      const match = raw.match(/W?(\d+)$/);
+      const w = match ? parseInt(match[1]) : parseInt(raw);
+      if(!w) return;
+      const iniRaw = row.c[1]?.f || row.c[1]?.v;
+      const finRaw = row.c[2]?.f || row.c[2]?.v;
+      if(iniRaw) wDateMap[w] = {ini: iniRaw.toString().split('T')[0], fin: finRaw ? finRaw.toString().split('T')[0] : '—'};
     });
 
     // Historico
@@ -474,22 +572,6 @@ async function cargarSheets(){
       const key = row.c[0].v.toString().trim();
       const vals = Array.from({length:12},(_,i)=>row.c[i+1]?.v?num(row.c[i+1].v):null);
       st.hist[key] = vals;
-      if(key==='Presup 2026'||key==='Presup2026'||key==='presup2026'){
-        PANUAL = vals.map(v=>v||0);
-        st.hist['Presup2026'] = vals;
-      }
-    });
-
-    // Popola wDateMap con date inizio/fine settimana
-    rows2.forEach(row=>{
-      if(!row.c||!row.c[0]||!row.c[0].v) return;
-      const raw = row.c[0].v.toString().trim();
-      const match = raw.match(/W?(\d+)$/);
-      const w = match ? parseInt(match[1]) : parseInt(raw);
-      if(!w) return;
-      const iniRaw = row.c[1]?.f || row.c[1]?.v;
-      const finRaw = row.c[2]?.f || row.c[2]?.v;
-      if(iniRaw) wDateMap[w] = {ini: iniRaw.toString().split('T')[0], fin: finRaw ? finRaw.toString().split('T')[0] : '—'};
     });
 
     const now = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
@@ -506,28 +588,43 @@ async function cargarSheets(){
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
 function render(){
-  const lastIdx = getHoyIdx(); // ultimo giorno con dati
-  const dias=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  const YEAR = 2026;
+  const dias = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 
-  // Oggi = giorno reale; se non ancora inserito mostra obiettivo
-  const today = new Date();
-  const todayDayOfMonth = (today.getMonth()===3 && today.getFullYear()===2026) ? today.getDate() : (lastIdx+2);
-  const todayIdx = Math.min(todayDayOfMonth-1, 29);
-  const hasTodayData = st.v[todayIdx] > 0;
-  const hoyIdx = todayIdx;
-  const prevIdx = Math.max(hoyIdx-7, 0);
-  const vh = st.v[hoyIdx]||0, vp = st.v[prevIdx]||0;
-  const ch = st.c[hoyIdx]||0, cp = st.c[prevIdx]||0;
+  // Determine current real month
+  const realToday = new Date();
+  const curMonth = (realToday.getFullYear()===YEAR) ? realToday.getMonth() : 3;
+  const PMES = PANUAL[curMonth];
+  const DIAS_MES = DIAS_MES_2026[curMonth];
+
+  // Today
+  const todayDayOfMonth = (realToday.getFullYear()===YEAR && realToday.getMonth()===curMonth)
+    ? realToday.getDate()
+    : (getLastDataIdx(curMonth)+2);
+  const todayIdx = Math.min(todayDayOfMonth-1, DIAS_MES-1);
+  const hasTodayData = allData[curMonth].v[todayIdx] > 0;
+  const lastIdx = getLastDataIdx(curMonth);
+
+  const prevIdx = Math.max(todayIdx-7, 0);
+  const vh = allData[curMonth].v[todayIdx]||0;
+  const vp = allData[curMonth].v[prevIdx]||0;
+  const ch = allData[curMonth].c[todayIdx]||0;
+  const cp = allData[curMonth].c[prevIdx]||0;
   const prom = ch?Math.round(vh/ch):0, promp=cp?Math.round(vp/cp):0;
-  const tgt = targetDia[hoyIdx], pHoy=pct(vh,tgt), cHoy=clr(pHoy);
-  const dname = dias[new Date(2026,3,hoyIdx+1).getDay()];
-  document.getElementById('sec-hoy').textContent=`Hoy — ${dname} ${hoyIdx+1} Abr`;
+  const tgt = getTargetDia(YEAR, curMonth, todayIdx+1);
+  const pHoy = pct(vh, tgt), cHoy = clr(pHoy);
+  const dname = dias[new Date(YEAR,curMonth,todayIdx+1).getDay()];
 
-  // HOY: se dati non inseriti mostra obiettivo + ieri; altrimenti tutto
+  document.getElementById('sec-hoy').textContent = `Hoy — ${dname} ${todayIdx+1} ${MESES_CORTOS[curMonth]}`;
+  document.getElementById('sec-mes').textContent = `Mes — ${MESES_NOMBRES[curMonth]} 2026`;
+  document.getElementById('sec-diario').textContent = `Ventas diarias — ${MESES_NOMBRES[curMonth]} 2026`;
+  document.getElementById('page-sub').textContent = `${MESES_NOMBRES[curMonth]} 2026 — BKS`;
+
+  // HOY KPIs
   let kpiHoyHtml = '';
   if(!hasTodayData){
     const ayerIdx = lastIdx;
-    const ayerPct = pct(st.v[ayerIdx], targetDia[ayerIdx]);
+    const ayerPct = pct(allData[curMonth].v[ayerIdx], getTargetDia(YEAR,curMonth,ayerIdx+1));
     kpiHoyHtml = `
       <div class="kpi" style="grid-column:1/3">
         <div class="kpi-lbl">Objetivo de hoy</div>
@@ -536,9 +633,9 @@ function render(){
         <div style="margin-top:6px;font-size:11px;color:var(--text3)">Sem. ant. mismo día: ${fmtM(vp)}</div>
       </div>
       <div class="kpi" style="grid-column:3/5">
-        <div class="kpi-lbl">Ayer — ${dias[new Date(2026,3,ayerIdx+1).getDay()]} ${ayerIdx+1} Mar</div>
-        <div class="kpi-val">${fmtM(st.v[ayerIdx])}</div>
-        <div class="kpi-sub">obj ${fmtM(targetDia[ayerIdx])}</div>
+        <div class="kpi-lbl">Ayer — ${dias[new Date(YEAR,curMonth,ayerIdx+1).getDay()]} ${ayerIdx+1} ${MESES_CORTOS[curMonth]}</div>
+        <div class="kpi-val">${fmtM(allData[curMonth].v[ayerIdx])}</div>
+        <div class="kpi-sub">obj ${fmtM(getTargetDia(YEAR,curMonth,ayerIdx+1))}</div>
         <span class="kpi-badge ${bc(clr(ayerPct))}">${ayerPct}%</span>
       </div>`;
   } else {
@@ -550,32 +647,26 @@ function render(){
   }
   document.getElementById('kpi-hoy').innerHTML = kpiHoyHtml;
 
-
   // MES
-  const totV=st.v.reduce((a,b)=>a+b,0);
-  // Solo settimane del mese corrente (definite in wMap)
-  // Per RRHH escludi settimane parziali (meno di 5 giorni nel mese)
-  const mesWeeks = Object.keys(wMap).map(Number);
-  const fullWeeks = mesWeeks.filter(w => {
-    const r = wMap[w];
-    return r ? (r[1] - r[0] + 1) >= 5 : false;
-  });
-  const allLiq=mesWeeks.reduce((a,w)=>a+(st.w[w]?.liq||0),0);
-  const allSol=mesWeeks.reduce((a,w)=>a+(st.w[w]?.sol||0),0);
-  const allOtros=mesWeeks.reduce((a,w)=>a+(st.w[w]?.otros||0),0);
-  const allRRHH=fullWeeks.reduce((a,w)=>a+(st.w[w]?.rrhh||0),0);
-  const totC=allLiq+allSol+allOtros;
-  const pV=pct(totV,PMES),pC=pct(totC,totV),pR=pct(allRRHH,totV);
-  const marg=totV-totC-allRRHH;
-  const vs1=+(pct(totV,MES_ANT_TOTAL)-100).toFixed(1);
-  const vs2=+(pct(totV,MES_ANT2_TOTAL)-100).toFixed(1);
-
-  // Totale cuentas e promedio del mese
-  const totCuentas = st.c.reduce((a,b)=>a+b,0);
+  const totV = monthTotal(curMonth);
+  const weeks = getWeeksOfMonth(YEAR, curMonth);
+  const fullWeeks = weeks.filter(wk => (wk.lastDay - wk.firstDay + 1) >= 5);
+  const allLiq   = weeks.reduce((a,wk)=>a+(st.w[wk.w]?.liq||0),0);
+  const allSol   = weeks.reduce((a,wk)=>a+(st.w[wk.w]?.sol||0),0);
+  const allOtros = weeks.reduce((a,wk)=>a+(st.w[wk.w]?.otros||0),0);
+  const allRRHH  = fullWeeks.reduce((a,wk)=>a+(st.w[wk.w]?.rrhh||0),0);
+  const totC = allLiq+allSol+allOtros;
+  const pV=pct(totV,PMES), pC=pct(totC,totV), pR=pct(allRRHH,totV);
+  const marg = totV-totC-allRRHH;
+  const prevMonthTotal = curMonth>0 ? monthTotal(curMonth-1) : 0;
+  const prevPrevMonthTotal = curMonth>1 ? monthTotal(curMonth-2) : 0;
+  const vs1 = prevMonthTotal>0 ? +(pct(totV,prevMonthTotal)-100).toFixed(1) : 0;
+  const vs2 = prevPrevMonthTotal>0 ? +(pct(totV,prevPrevMonthTotal)-100).toFixed(1) : 0;
+  const totCuentas = monthCuentasTotal(curMonth);
   const promMes = totCuentas ? Math.round(totV/totCuentas) : 0;
 
   document.getElementById('kpi-mes').innerHTML=`
-    <div class="kpi"><div class="kpi-lbl">Ventas del mes</div><div class="kpi-val">${fmtM(totV)}</div><div class="kpi-sub">obj ${fmtM(PMES)}</div><div style="margin-top:6px">${pill("Mar'26",vs1)}${pill("Abr'25",vs2)}</div><span class="kpi-badge ${bc(clr(pV))}">${pV}%</span></div>
+    <div class="kpi"><div class="kpi-lbl">Ventas del mes</div><div class="kpi-val">${fmtM(totV)}</div><div class="kpi-sub">obj ${fmtM(PMES)}</div><div style="margin-top:6px">${pill(MESES_CORTOS[curMonth-1]||'—',vs1)}${pill(MESES_CORTOS[curMonth-2]||'—',vs2)}</div><span class="kpi-badge ${bc(clr(pV))}">${pV}%</span></div>
     <div class="kpi"><div class="kpi-lbl">Cuentas / Promedio</div><div class="kpi-val">${totCuentas}</div><div class="kpi-sub">$${Math.round(promMes/1000)}k prom/cuenta</div></div>
     <div class="kpi"><div class="kpi-lbl">Margen bruto</div><div class="kpi-val">${fmtM(marg)}</div><div class="kpi-sub">${pct(marg,totV).toFixed(1)}% del facturado</div></div>
     <div class="kpi" style="display:none"></div>`;
@@ -585,13 +676,13 @@ function render(){
     <div class="kpi"><div class="kpi-lbl">RRHH del mes</div><div class="kpi-val">${fmtM(allRRHH)}</div><div class="kpi-sub">${pR.toFixed(1)}% sobre ventas</div><span class="kpi-badge ${bc(clr(pR,true))}">${pR>0?(pR<=22?'OK':'ALTO'):'—'}</span></div>`;
 
   // PROYECCIÓN
-  const diasPasados=st.v.filter(x=>x>0).length||1;
-  const diasRestantes=Math.max(DIAS_MES-diasPasados,0);
-  const promDiario=totV/diasPasados;
-  const proyeccion=Math.round(promDiario*DIAS_MES);
-  const pProy=pct(proyeccion,PMES);
-  const hexProy=clr(pProy)==='green'?'var(--green)':clr(pProy)==='yellow'?'var(--yellow)':'var(--red)';
-  const falta=PMES-totV;
+  const diasPasados = allData[curMonth].v.filter(x=>x>0).length||1;
+  const diasRestantes = Math.max(DIAS_MES-diasPasados,0);
+  const promDiario = totV/diasPasados;
+  const proyeccion = Math.round(promDiario*DIAS_MES);
+  const pProy = pct(proyeccion,PMES);
+  const hexProy = clr(pProy)==='green'?'var(--green)':clr(pProy)==='yellow'?'var(--yellow)':'var(--red)';
+  const falta = PMES-totV;
 
   let caja3='';
   if(proyeccion>=PMES){
@@ -599,9 +690,10 @@ function render(){
   } else if(diasRestantes===0){
     caja3=`<div class="pj"><div class="pj-lbl">Resultado final</div><div class="pj-main" style="color:var(--red)">Mes cerrado</div><div class="pj-sub">Faltaron ${fmtM(falta)}</div></div>`;
   } else {
-    const factor=(falta/diasRestantes)/promDiario;
-    const necesario=Math.round(targetDia[Math.min(hoyIdx+1,30)]*factor);
-    const pctExtra=+((factor-1)*100).toFixed(1);
+    const nextDayTarget = getTargetDia(YEAR, curMonth, Math.min(todayIdx+2, DIAS_MES));
+    const factor = (falta/diasRestantes)/promDiario;
+    const necesario = Math.round(nextDayTarget*factor);
+    const pctExtra = +((factor-1)*100).toFixed(1);
     caja3=`<div class="pj"><div class="pj-lbl">Mañana debes vender</div><div class="pj-main" style="color:var(--red)">${fmtM(necesario)}</div><div class="pj-sub" style="color:var(--red)">+${pctExtra}% sobre ritmo actual</div><div class="pj-sub">${diasRestantes} días restantes</div></div>`;
   }
 
@@ -649,47 +741,236 @@ function render(){
       </div>
     </div>`;
 
+  buildMonthNav();
   renderDiario();
 }
 
-let cD=null;
-function renderDiario(){
+// ── MONTH NAV PILLS ─────────────────────────────────────────────────────────
+function buildMonthNav() {
+  // Find which months have data
+  const hasData = Array.from({length:12},(_,m)=>monthTotal(m)>0);
+  // Always include current real month and any month with data
+  const realToday = new Date();
+  const curMonth = (realToday.getFullYear()===2026) ? realToday.getMonth() : 3;
+  hasData[curMonth] = true;
+
+  let html = '';
+  for (let m = 0; m < 12; m++) {
+    if (!hasData[m]) continue;
+    const isCur = m === curMonth;
+    const isView = m === viewMonth;
+    html += `<button class="month-pill${isView?' active':''}" onclick="setViewMonth(${m})">${MESES_CORTOS[m]}</button>`;
+  }
+  document.getElementById('month-nav').innerHTML = html;
+}
+
+function setViewMonth(m) {
+  viewMonth = m;
+  buildMonthNav();
+  renderDiario();
+}
+
+// ── GRAFICO DIARIO SCROLLABLE ──────────────────────────────────────────────
+let cD = null;
+
+function renderDiario() {
+  const YEAR = 2026;
+  const m = viewMonth;
+  const isCurrent = (() => {
+    const t = new Date();
+    return t.getFullYear()===YEAR && t.getMonth()===m;
+  })();
+
+  const daysInM = DIAS_MES_2026[m];
+  const vData   = allData[m].v;
+  const cData   = allData[m].c;
+
+  const labs = Array.from({length: daysInM}, (_,i) => {
+    const d = new Date(YEAR, m, i+1);
+    return ['D','L','M','X','J','V','S'][d.getDay()] + (i+1);
+  });
+
+  const targets = Array.from({length: daysInM}, (_,i) => getTargetDia(YEAR, m, i+1));
+
+  const activos = vData.map((v,i) => v > 0 ? v : null);
+  const promDiario = vData.map((v,i) => v>0&&cData[i]>0 ? Math.round(v/cData[i]) : null);
+
+  // Colors: current month = green/red, past months = gray
+  const barColors = activos.map((s,i) => {
+    if(s===null) return 'rgba(255,255,255,0.04)';
+    if(!isCurrent) return 'rgba(150,150,160,0.45)'; // past month = gray
+    return s >= targets[i] ? 'rgba(10,138,82,0.75)' : 'rgba(214,48,48,0.65)';
+  });
+
+  // Width: ~28px per bar, min fill container
+  const barWidth = 28;
+  const container = document.getElementById('chart-scroll-container');
+  const minWidth = container ? container.offsetWidth : 400;
+  const chartWidth = Math.max(daysInM * barWidth, minWidth);
+
+  const inner = document.getElementById('chart-scroll-inner');
+  inner.style.width = chartWidth + 'px';
+
   if(cD) cD.destroy();
-  const labs=Array.from({length:30},(_,i)=>{const d=new Date(2026,3,i+1);return ['D','L','M','X','J','V','S'][d.getDay()]+(i+1)});
-  const activos=st.v.map(v=>v>0?v:null);
-  const promDiario=st.v.map((v,i)=>v>0&&st.c[i]>0?Math.round(v/st.c[i]):null);
-  cD=new Chart(document.getElementById('cDaily'),{type:'bar',
-    data:{labels:labs,datasets:[
-      {data:activos,backgroundColor:activos.map((s,i)=>s==null?'rgba(255,255,255,0.04)':s>=targetDia[i]?'rgba(10,138,82,0.75)':'rgba(214,48,48,0.65)'),borderRadius:3,order:2,yAxisID:'y'},
-      {data:targetDia,type:'line',borderColor:'rgba(26,111,212,0.5)',borderWidth:1.5,pointRadius:0,fill:false,tension:0,order:1,yAxisID:'y'},
-      {label:'Prom/cuenta',data:promDiario,type:'line',borderColor:'rgba(196,125,10,0.8)',borderWidth:1.5,pointRadius:3,pointBackgroundColor:'rgba(196,125,10,0.8)',fill:false,tension:0.3,order:0,yAxisID:'y2',spanGaps:false}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.datasetIndex===2?'$'+Math.round(c.raw/1000)+'k prom/cta':c.raw?fmtM(c.raw):'sin datos'},backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1}},
-      scales:{
-        x:{ticks:{color:'#9098aa',font:{size:9},autoSkip:false,maxRotation:60},grid:{color:'rgba(0,0,0,0.05)'}},
-        y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:9}},grid:{color:'rgba(0,0,0,0.06)'}},
-        y2:{position:'right',ticks:{callback:v=>'$'+Math.round(v/1000)+'k',color:'rgba(196,125,10,0.7)',font:{size:9}},grid:{display:false}}
+  cD = new Chart(document.getElementById('cDaily'), {
+    type: 'bar',
+    data: {
+      labels: labs,
+      datasets: [
+        {
+          data: activos,
+          backgroundColor: barColors,
+          borderRadius: 3,
+          order: 2,
+          yAxisID: 'y'
+        },
+        {
+          data: targets,
+          type: 'line',
+          borderColor: 'rgba(26,111,212,0.5)',
+          borderWidth: 1.5,
+          pointRadius: 0,
+          fill: false,
+          tension: 0,
+          order: 1,
+          yAxisID: 'y'
+        },
+        {
+          label: 'Prom/cuenta',
+          data: promDiario,
+          type: 'line',
+          borderColor: 'rgba(196,125,10,0.8)',
+          borderWidth: 1.5,
+          pointRadius: 3,
+          pointBackgroundColor: 'rgba(196,125,10,0.8)',
+          fill: false,
+          tension: 0.3,
+          order: 0,
+          yAxisID: 'y2',
+          spanGaps: false
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: c => c.datasetIndex===2 ? '$'+Math.round(c.raw/1000)+'k prom/cta' : c.raw ? fmtM(c.raw) : 'sin datos'
+          },
+          backgroundColor: '#ffffff',
+          borderColor: 'rgba(0,0,0,0.1)',
+          borderWidth: 1,
+          titleColor: '#1a1d23',
+          bodyColor: '#4a5060'
+        }
+      },
+      scales: {
+        x: { ticks: { color: '#9098aa', font: { size: 9 }, autoSkip: false, maxRotation: 60 }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y: { ticks: { callback: v => fmtM(v), color: '#9098aa', font: { size: 9 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
+        y2: { position: 'right', ticks: { callback: v => '$'+Math.round(v/1000)+'k', color: 'rgba(196,125,10,0.7)', font: { size: 9 } }, grid: { display: false } }
       }
     }
   });
+
+  // Set canvas pixel size to match
+  const canvas = document.getElementById('cDaily');
+  canvas.style.width  = chartWidth + 'px';
+  canvas.style.height = '200px';
+  canvas.width  = chartWidth * window.devicePixelRatio;
+  canvas.height = 200 * window.devicePixelRatio;
+  cD.resize();
+
+  // Scroll to current month's last data day
+  if(isCurrent) {
+    const lastIdx = getLastDataIdx(m);
+    const scrollTo = Math.max(0, (lastIdx - 3) * barWidth);
+    setTimeout(() => { container.scrollLeft = scrollTo; }, 100);
+  } else {
+    // Past months: scroll to start
+    setTimeout(() => { container.scrollLeft = 0; }, 100);
+  }
+
+  // Drag to scroll
+  setupDragScroll(container);
 }
 
-function renderSemanas(){
-  const ws=Object.keys(wMap).map(Number);
-  const wV=ws.map(w=>vSem(w));
-  let h=`<tr><th>Semana</th><th class="hide-mobile">Período</th><th>Ventas</th><th class="hide-mobile">Target</th><th>% vs target</th><th>Costo %<br><span style="font-weight:400;font-size:10px;text-transform:none">obj ≤25%</span></th><th>RRHH %<br><span style="font-weight:400;font-size:10px;text-transform:none">obj ≤22%</span></th><th class="hide-mobile">Margen</th><th class="hide-mobile">vs sem. ant.</th></tr>`;
-  ws.forEach((w,i)=>{
-    const v=wV[i],wd=st.w[w]||{};
-    const c=(wd.liq||0)+(wd.sol||0)+(wd.otros||0),r=wd.rrhh||0;
-    const pV2=pct(v,wTargets[w]),pC=pct(c,v),pR=pct(r,v);
-    const prev=i>0?wV[i-1]:null;
-    const dif=prev&&prev>0?+(((v-prev)/prev)*100).toFixed(1):null;
-    h+=`<tr>
-      <td>Sem ${w}</td>
-      <td class="hide-mobile" style="color:var(--text3);font-size:11px">${wLabels[w]}</td>
+function setupDragScroll(el) {
+  if(el._dragSetup) return;
+  el._dragSetup = true;
+  let isDown = false, startX, scrollLeft;
+  el.addEventListener('mousedown', e => { isDown=true; startX=e.pageX-el.offsetLeft; scrollLeft=el.scrollLeft; el.style.cursor='grabbing'; });
+  el.addEventListener('mouseleave', () => { isDown=false; el.style.cursor='grab'; });
+  el.addEventListener('mouseup', () => { isDown=false; el.style.cursor='grab'; });
+  el.addEventListener('mousemove', e => { if(!isDown) return; e.preventDefault(); const x=e.pageX-el.offsetLeft; el.scrollLeft=scrollLeft-(x-startX); });
+}
+
+// ── SEMANAS ─────────────────────────────────────────────────────────────────
+function buildSemanasMonthNav() {
+  const hasData = Array.from({length:12},(_,m)=>monthTotal(m)>0);
+  const realToday = new Date();
+  const curMonth = (realToday.getFullYear()===2026) ? realToday.getMonth() : 3;
+  hasData[curMonth] = true;
+
+  let html = '';
+  for (let m = 0; m < 12; m++) {
+    if (!hasData[m]) continue;
+    html += `<button class="month-pill${m===semanasViewMonth?' active':''}" onclick="setSemanasMonth(${m})">${MESES_CORTOS[m]}</button>`;
+  }
+  document.getElementById('semanas-month-nav').innerHTML = html;
+}
+
+function setSemanasMonth(m) {
+  semanasViewMonth = m;
+  renderSemanas();
+}
+
+function renderSemanas() {
+  buildSemanasMonthNav();
+  const YEAR = 2026;
+  const m = semanasViewMonth;
+  document.getElementById('semanas-sub').textContent = `${MESES_NOMBRES[m]} 2026`;
+
+  const weeks = getWeeksOfMonth(YEAR, m);
+
+  // Ventas por semana: suma de días del mes en esa semana
+  function vSemMes(wk) {
+    return allData[m].v.slice(wk.firstDay-1, wk.lastDay).reduce((a,b)=>a+b,0);
+  }
+
+  // Target semanal: suma de targets de los días
+  function tSemMes(wk) {
+    let t = 0;
+    for(let d = wk.firstDay; d <= wk.lastDay; d++) t += getTargetDia(YEAR, m, d);
+    return t;
+  }
+
+  const wV = weeks.map(wk => vSemMes(wk));
+  const wT = weeks.map(wk => tSemMes(wk));
+
+  const dayNames = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+  function weekLabel(wk) {
+    if(wk.firstDay === wk.lastDay) {
+      return dayNames[new Date(YEAR,m,wk.firstDay).getDay()] + ' ' + wk.firstDay + ' ' + MESES_CORTOS[m];
+    }
+    return `${wk.firstDay}–${wk.lastDay} ${MESES_CORTOS[m]}`;
+  }
+
+  let h = `<tr><th>Semana</th><th class="hide-mobile">Período</th><th>Ventas</th><th class="hide-mobile">Target</th><th>% vs target</th><th>Costo %<br><span style="font-weight:400;font-size:10px;text-transform:none">obj ≤25%</span></th><th>RRHH %<br><span style="font-weight:400;font-size:10px;text-transform:none">obj ≤22%</span></th><th class="hide-mobile">Margen</th><th class="hide-mobile">vs sem. ant.</th></tr>`;
+
+  weeks.forEach((wk,i) => {
+    const v = wV[i], wd = st.w[wk.w]||{};
+    const c = (wd.liq||0)+(wd.sol||0)+(wd.otros||0), r = wd.rrhh||0;
+    const pV2 = pct(v, wT[i]), pC = pct(c,v), pR = pct(r,v);
+    const prev = i>0 ? wV[i-1] : null;
+    const dif = prev&&prev>0 ? +(((v-prev)/prev)*100).toFixed(1) : null;
+    h += `<tr>
+      <td>Sem ${wk.w}</td>
+      <td class="hide-mobile" style="color:var(--text3);font-size:11px">${weekLabel(wk)}</td>
       <td style="font-family:var(--mono)">${v>0?fmtM(v):'—'}</td>
-      <td class="hide-mobile" style="color:var(--text3);font-family:var(--mono)">${fmtM(wTargets[w])}</td>
+      <td class="hide-mobile" style="color:var(--text3);font-family:var(--mono)">${fmtM(wT[i])}</td>
       <td>${v>0?`<span class="kpi-badge ${bc(clr(pV2))}" style="position:static">${pV2}%</span>`:'—'}</td>
       <td style="color:${pC>0&&pC<=25?'var(--green)':pC>25?'var(--red)':'var(--text3)'};font-family:var(--mono);font-size:12px">${pC>0?pC.toFixed(1)+'%'+(pC>25?' ▲':' ✓'):'—'}</td>
       <td style="color:${pR>0&&pR<=22?'var(--green)':pR>22?'var(--red)':'var(--text3)'};font-family:var(--mono);font-size:12px">${pR>0?pR.toFixed(1)+'%'+(pR>22?' ▲':' ✓'):'—'}</td>
@@ -697,12 +978,13 @@ function renderSemanas(){
       <td class="hide-mobile" style="font-family:var(--mono)">${dif===null?'—':`<span style="color:${dif>=0?'var(--green)':'var(--red)'}">${dif>=0?'+':''}${dif}%</span>`}</td>
     </tr>`;
   });
-  document.getElementById('tabla-semanas').innerHTML=h;
-  const wPctLiq  = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.liq||0,  wV[i]):null);
-  const wPctSol  = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.sol||0,  wV[i]):null);
-  const wPctOtros= ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.otros||0,wV[i]):null);
-  const wPctC    = ws.map((w,i)=>wV[i]>0?pct((st.w[w]?.liq||0)+(st.w[w]?.sol||0)+(st.w[w]?.otros||0),wV[i]):null);
-  const wPctR    = ws.map((w,i)=>wV[i]>0?pct(st.w[w]?.rrhh||0, wV[i]):null);
+  document.getElementById('tabla-semanas').innerHTML = h;
+
+  const wPctLiq   = weeks.map((wk,i)=>wV[i]>0?pct(st.w[wk.w]?.liq||0,  wV[i]):null);
+  const wPctSol   = weeks.map((wk,i)=>wV[i]>0?pct(st.w[wk.w]?.sol||0,  wV[i]):null);
+  const wPctOtros = weeks.map((wk,i)=>wV[i]>0?pct(st.w[wk.w]?.otros||0,wV[i]):null);
+  const wPctC     = weeks.map((wk,i)=>wV[i]>0?pct((st.w[wk.w]?.liq||0)+(st.w[wk.w]?.sol||0)+(st.w[wk.w]?.otros||0),wV[i]):null);
+  const wPctR     = weeks.map((wk,i)=>wV[i]>0?pct(st.w[wk.w]?.rrhh||0, wV[i]):null);
 
   document.getElementById('leg-kpi').innerHTML=`
     <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed #E24B4A"></span>Líquidos %</span>
@@ -714,15 +996,15 @@ function renderSemanas(){
     <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(55,138,221,0.4)"></span>Obj 22%</span>`;
 
   if(document.getElementById('cKpi')._ch) document.getElementById('cKpi')._ch.destroy();
-  const ch=new Chart(document.getElementById('cKpi'),{type:'line',
-    data:{labels:ws.map(w=>'Sem '+w),datasets:[
+  const ch = new Chart(document.getElementById('cKpi'),{type:'line',
+    data:{labels:weeks.map(wk=>'Sem '+wk.w),datasets:[
       {label:'Líquidos %', data:wPctLiq,  borderColor:'#E24B4A',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:3,fill:false,tension:0.3,spanGaps:false},
       {label:'Sólidos %',  data:wPctSol,  borderColor:'#EF9F27',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:3,fill:false,tension:0.3,spanGaps:false},
       {label:'Otros %',    data:wPctOtros,borderColor:'#9C6FD6',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:3,fill:false,tension:0.3,spanGaps:false},
       {label:'Total Costo %',data:wPctC, borderColor:'#C42B2B',backgroundColor:'rgba(196,43,43,0.07)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:wPctC.map(p=>p===null?'transparent':p>25?'#C42B2B':'#0a7a48'),fill:true,tension:0.3,spanGaps:false},
       {label:'RRHH %',     data:wPctR,    borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.05)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:wPctR.map(p=>p===null?'transparent':p>22?'#C42B2B':'#0a7a48'),fill:true,tension:0.3,spanGaps:false},
-      {label:'Obj 25%',data:ws.map(()=>25),borderColor:'rgba(196,43,43,0.4)', borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false},
-      {label:'Obj 22%',data:ws.map(()=>22),borderColor:'rgba(55,138,221,0.4)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
+      {label:'Obj 25%',data:weeks.map(()=>25),borderColor:'rgba(196,43,43,0.4)', borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false},
+      {label:'Obj 22%',data:weeks.map(()=>22),borderColor:'rgba(55,138,221,0.4)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{
@@ -732,64 +1014,80 @@ function renderSemanas(){
       scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
-  document.getElementById('cKpi')._ch=ch;
+  document.getElementById('cKpi')._ch = ch;
 }
 
+// ── ANUAL ───────────────────────────────────────────────────────────────────
 function renderAnual(){
-  const r24=st.hist[2024]||[297906411,291225436,341208112,301677340,309884354,364767832,462765061,501241001,356737859,291250866,270486214,239385855];
-  const r25=st.hist[2025]||[250054470,194157027,237826547,214927080,222119098,224763740,378198057,404119601,214083609,208564834,202753468,168168505];
-  // Real 2026: usa storico se disponibile, aggiorna mese corrente con dati live
-  const r26=st.hist['Presup2026']?[...Array(12).fill(null)]:([210609243,193429183,null,null,null,null,null,null,null,null,null,null]);
-  if(st.hist['Real2026']) st.hist['Real2026'].forEach((v,i)=>{if(v) r26[i]=v;});
-  // Aggiorna Aprile (mese 3) con totale live da Input_Diario
-  const totMes=st.v.reduce((a,b)=>a+b,0); if(totMes>0) r26[3]=totMes;
-  const ms=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const YEAR = 2026;
+  const r24 = st.hist[2024]||[297906411,291225436,341208112,301677340,309884354,364767832,462765061,501241001,356737859,291250866,270486214,239385855];
+  const r25 = st.hist[2025]||[250054470,194157027,237826547,214927080,222119098,224763740,378198057,404119601,214083609,208564834,202753468,168168505];
+
+  // Real 2026: build from allData (sum of all daily data per month) + hardcoded Jan/Feb if no daily data
+  const r26 = Array(12).fill(null);
+  // Hardcoded past months totals (Jan, Feb) as fallback
+  const fallback26 = [210609243, 193429183, null, null, null, null, null, null, null, null, null, null];
+
+  for(let m = 0; m < 12; m++){
+    const liveTotal = monthTotal(m);
+    if(liveTotal > 0){
+      r26[m] = liveTotal;
+    } else if(fallback26[m] !== null){
+      r26[m] = fallback26[m];
+    }
+    // Override with Historico if available and more complete
+    if(st.hist['Real2026']?.[m]) r26[m] = st.hist['Real2026'][m];
+  }
+
+  const presup2026 = st.hist['Presup 2026'] || st.hist['Presup2026'] || PANUAL;
+
+  const ms = MESES_CORTOS;
   if(document.getElementById('cAnual')._ch) document.getElementById('cAnual')._ch.destroy();
-  const ca=new Chart(document.getElementById('cAnual'),{type:'line',
+  const ca = new Chart(document.getElementById('cAnual'),{type:'line',
     data:{labels:ms,datasets:[
       {label:'2024',data:r24,borderColor:'#444950',borderWidth:1.5,pointRadius:2,fill:false,tension:0.3},
       {label:'2025',data:r25,borderColor:'#f5a623',borderWidth:1.5,pointRadius:2,fill:false,tension:0.3},
-      {label:'Presupuesto 2026',data:PANUAL,borderColor:'rgba(77,159,255,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.3},
+      {label:'Presupuesto 2026',data:presup2026,borderColor:'rgba(77,159,255,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.3},
       {label:'Real 2026',data:r26,borderColor:'#00c97a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#00c97a',fill:false,tension:0.3,spanGaps:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+fmtM(c.raw)}}},
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+(c.raw!=null?fmtM(c.raw):'n/d')}}},
       scales:{y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
-  document.getElementById('cAnual')._ch=ca;
-  const pb=PANUAL.map((b,i)=>r26[i]!=null?+pct(r26[i],b).toFixed(1):null);
+  document.getElementById('cAnual')._ch = ca;
+
+  const pb = presup2026.map((b,i) => r26[i]!=null ? +pct(r26[i],b).toFixed(1) : null);
   if(document.getElementById('cPresup')._ch) document.getElementById('cPresup')._ch.destroy();
-  const cb=new Chart(document.getElementById('cPresup'),{type:'bar',
+  const cb = new Chart(document.getElementById('cPresup'),{type:'bar',
     data:{labels:ms,datasets:[{data:pb,backgroundColor:pb.map(p=>p==null?'rgba(255,255,255,0.04)':p>=100?'rgba(0,201,122,0.7)':p>=85?'rgba(245,166,35,0.7)':'rgba(255,77,77,0.65)'),borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.raw+'%':'n/d'}}},
       scales:{y:{ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},min:0,max:130,grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
     }
   });
-  document.getElementById('cPresup')._ch=cb;
+  document.getElementById('cPresup')._ch = cb;
 }
 
+// ── INPUT / SAVE ─────────────────────────────────────────────────────────────
 async function guardarDia(){
-  const fechaRaw=document.getElementById('in-fecha').value;
-  const v=parseFloat(document.getElementById('in-ventas').value);
-  const c=parseFloat(document.getElementById('in-cuentas').value);
+  const fechaRaw = document.getElementById('in-fecha').value;
+  const v = parseFloat(document.getElementById('in-ventas').value);
+  const c = parseFloat(document.getElementById('in-cuentas').value);
   if(!fechaRaw||!v){alert('Ingresa fecha y ventas');return}
-  const d=parseInt(fechaRaw.split('-')[2]);
-  st.v[d-1]=v; if(c) st.c[d-1]=c;
+  const parts = fechaRaw.split('-');
+  const mIdx = parseInt(parts[1])-1;
+  const dIdx = parseInt(parts[2])-1;
+  allData[mIdx].v[dIdx]=v; if(c) allData[mIdx].c[dIdx]=c;
   render();
-  const btn=document.querySelector('#tab-input .btn');
+  const btn = document.querySelector('#tab-input .btn');
   btn.textContent='Guardando...'; btn.disabled=true;
-  const parts=fechaRaw.split('-');
   const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const fechaFmt=`${parseInt(parts[2])}-${months[parseInt(parts[1])-1]}-${parts[0]}`;
-  const res=await callSheets({type:'diario',fecha:fechaFmt,ventas:v,cuentas:c||0});
+  const res = await callSheets({type:'diario',fecha:fechaFmt,ventas:v,cuentas:c||0});
   btn.textContent=res.status==='ok'?'¡Guardado en Sheets!':'Error — revisa conexión';
   setTimeout(()=>{btn.textContent='Guardar día';btn.disabled=false;autoSuggestIngreso();},2500);
 }
-// Legge date lun/dom dalla wMap per la settimana selezionata
-// wDateMap viene popolato durante il caricamento da Input_Semanal
-const wDateMap = {};
 
 function updateSemDates(val){
   const w = parseInt(val);
@@ -832,20 +1130,23 @@ async function guardarSemana(){
 }
 
 function autoSuggestIngreso(){
-  // Prossimo giorno mancante
-  let lastDay=0;
-  for(let i=0;i<st.v.length;i++) if(st.v[i]>0) lastDay=i;
-  const nextDate=new Date(2026,3,lastDay+2);
-  if(nextDate.getMonth()===3) document.getElementById('in-fecha').valueAsDate=nextDate;
-  // Prossima settimana mancante
-  const wNums=Object.keys(wMap).map(Number);
-  let lastW=null;
-  for(const w of wNums){
-    const wd=st.w[w];
-    if(wd&&((wd.liq||0)+(wd.sol||0)+(wd.otros||0)+(wd.rrhh||0))>0) lastW=w;
+  // Suggest next day with no data in current month
+  const realToday = new Date();
+  const curM = (realToday.getFullYear()===2026) ? realToday.getMonth() : 3;
+  let lastDay = 0;
+  for(let i=0;i<allData[curM].v.length;i++) if(allData[curM].v[i]>0) lastDay=i;
+  const nextDate = new Date(2026, curM, lastDay+2);
+  if(nextDate.getMonth()===curM) document.getElementById('in-fecha').valueAsDate=nextDate;
+  // Suggest next week
+  const curWeeks = getWeeksOfMonth(2026, curM);
+  let lastW = null;
+  for(const wk of curWeeks){
+    const wd=st.w[wk.w];
+    if(wd&&((wd.liq||0)+(wd.sol||0)+(wd.otros||0)+(wd.rrhh||0))>0) lastW=wk.w;
   }
-  const nextW=lastW?Math.min(lastW+1,wNums[wNums.length-1]):wNums[0];
-  document.getElementById('in-sem').value=nextW;
+  const wNums = curWeeks.map(wk=>wk.w);
+  const nextW = lastW ? Math.min(lastW+1, wNums[wNums.length-1]) : wNums[0];
+  document.getElementById('in-sem').value = nextW;
 }
 
 function go(id){
