@@ -546,6 +546,8 @@ async function cargarSheets(){
     rows2.forEach(row=>{
       if(!row.c||!row.c[0]||!row.c[0].v) return;
       const raw = row.c[0].v.toString().trim();
+      // Solo settimane 2026 — ignora 2025-W01 ecc.
+      if(raw.startsWith('2025')) return;
       const match = raw.match(/W?(\d+)$/);
       const w = match ? parseInt(match[1]) : parseInt(raw);
       if(!w||!st.w[w]) return;
@@ -570,6 +572,7 @@ async function cargarSheets(){
     rows2.forEach(row=>{
       if(!row.c||!row.c[0]||!row.c[0].v) return;
       const raw = row.c[0].v.toString().trim();
+      if(raw.startsWith('2025')) return;
       const match = raw.match(/W?(\d+)$/);
       const w = match ? parseInt(match[1]) : parseInt(raw);
       if(!w) return;
@@ -949,15 +952,6 @@ function renderSemanas() {
   document.getElementById('semanas-sub').textContent = `${MESES_NOMBRES[m]} 2026`;
 
   const weeks = getWeeksOfMonth(YEAR, m);
-
-  // DEBUG: mostra valori in console
-  console.log('=== renderSemanas m='+m+' weeks='+weeks.length);
-  console.log('allData['+m+'].v:', allData[m].v.slice(0,10));
-  weeks.forEach(wk => {
-    const v = allData[m].v.slice(wk.firstDay-1, wk.lastDay).reduce((a,b)=>a+b,0);
-    const wd = st.w[wk.w];
-    console.log('Sem'+wk.w+' v='+v+' liq='+(wd?.liq||0)+' sol='+(wd?.sol||0)+' rrhh='+(wd?.rrhh||0));
-  });
 
   // Ventas por semana: suma de días del mes en esa semana
   function vSemMes(wk) {
