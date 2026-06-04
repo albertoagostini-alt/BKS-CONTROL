@@ -267,6 +267,7 @@ body {
 .estado-badge.existe { background: var(--green-bg); color: var(--green); border: 1px solid rgba(46,212,122,0.25); }
 .estado-badge.nuevo { background: var(--bg3); color: var(--text3); border: 1px solid var(--border2); }
 .estado-fill { flex: 1; }
+.dia-semana { font-size: 13px; font-weight: 600; color: var(--accent); font-family: var(--font); text-transform: capitalize; letter-spacing: .01em; padding-left: 4px; }
 </style>
 </head>
 <body>
@@ -274,7 +275,7 @@ body {
 
 <aside class="sidebar">
   <div class="logo">
-    <div class="logo-icon"><span>BKS</span></div>
+    <div class="logo-icon"><svg viewBox="0 0 24 24" width="20" height="20" aria-label="Sterlizia"><g fill="none" stroke-width="0"><path d="M11 21 L10 12 L13 12 L12 21 Z" fill="#2ea043"/><path d="M11 13 C7 13 4 11 3 9 C5 9 8 9.5 11 11 Z" fill="#1f7a34"/><path d="M11.5 12 L6 8.5 L8.5 8 L12 11 Z" fill="#ff5247"/><path d="M11.5 12 L8 6.5 L10.2 6.8 L12 11 Z" fill="#ff7a18"/><path d="M12 11.5 L11 4 L13 4.6 L13 11.5 Z" fill="#ffa033"/><path d="M12 11.5 L15.5 5.5 L16.8 7.2 L13 11.5 Z" fill="#ff7a18"/><path d="M12 11.5 L18 8 L18.5 10 L13 12 Z" fill="#ff5247"/><circle cx="12" cy="11.5" r="1.3" fill="#ffd36b"/></g></svg></div>
     <div class="logo-text">
       <div class="logo-name">BKS Control</div>
       <div class="logo-sub">2026</div>
@@ -348,11 +349,12 @@ body {
       <div class="nav-row">
         <button class="nav-arrow" onclick="navDia(-1)" title="Día anterior">‹</button>
         <button class="nav-arrow" onclick="navDia(1)" title="Día siguiente">›</button>
+        <span class="dia-semana" id="dia-semana"></span>
         <div class="estado-fill"></div>
         <span class="estado-badge nuevo" id="estado-dia">Nuevo ingreso</span>
       </div>
       <div class="ir"><label>Fecha</label><input type="date" id="in-fecha" onchange="onFechaChange()"/></div>
-      <div class="ir"><label>Ventas ($)</label><input type="number" id="in-ventas" placeholder="ej. 11402860"/></div>
+      <div class="ir"><label>Ventas ($)</label><input type="text" inputmode="numeric" id="in-ventas" placeholder="ej. 11.402.860" oninput="fmtMiles(this)"/></div>
       <div class="ir"><label>N° cuentas</label><input type="number" id="in-cuentas" placeholder="ej. 239"/></div>
       <button class="btn" onclick="guardarDia()">Guardar día</button>
     </div>
@@ -379,10 +381,10 @@ body {
         <span class="estado-badge nuevo" id="estado-sem">Nuevo ingreso</span>
       </div>
       <div class="ir"><label>Semana ISO</label><input type="number" id="in-sem" placeholder="ej. 15" oninput="updateSemDates(this.value)"/></div>
-      <div class="ir"><label>Compras Líquidos ($)</label><input type="number" id="in-liq"/></div>
-      <div class="ir"><label>Compras Sólidos ($)</label><input type="number" id="in-sol"/></div>
-      <div class="ir"><label>Compras Otros ($)</label><input type="number" id="in-otros"/></div>
-      <div class="ir"><label>Total RRHH ($)</label><input type="number" id="in-rrhh"/></div>
+      <div class="ir"><label>Compras Líquidos ($)</label><input type="text" inputmode="numeric" id="in-liq" oninput="fmtMiles(this)"/></div>
+      <div class="ir"><label>Compras Sólidos ($)</label><input type="text" inputmode="numeric" id="in-sol" oninput="fmtMiles(this)"/></div>
+      <div class="ir"><label>Compras Otros ($)</label><input type="text" inputmode="numeric" id="in-otros" oninput="fmtMiles(this)"/></div>
+      <div class="ir"><label>Total RRHH ($)</label><input type="text" inputmode="numeric" id="in-rrhh" oninput="fmtMiles(this)"/></div>
       <button class="btn" onclick="guardarSemana()">Guardar semana</button>
     </div>
   </div>
@@ -1178,7 +1180,7 @@ function renderAnual(){
 // ── INPUT / SAVE ─────────────────────────────────────────────────────────────
 async function guardarDia(){
   const fechaRaw = document.getElementById('in-fecha').value;
-  const v = parseFloat(document.getElementById('in-ventas').value);
+  const v = parseMiles('in-ventas');
   const c = parseFloat(document.getElementById('in-cuentas').value);
   if(!fechaRaw||!v){alert('Ingresa fecha y ventas');return}
   const parts = fechaRaw.split('-');
@@ -1212,21 +1214,26 @@ function updateSemDates(val){
 function onFechaChange(){
   const fechaRaw = document.getElementById('in-fecha').value;
   const badge = document.getElementById('estado-dia');
-  if(!fechaRaw){ badge.className='estado-badge nuevo'; badge.textContent='Nuevo ingreso'; return; }
+  const diaEl = document.getElementById('dia-semana');
+  if(!fechaRaw){ badge.className='estado-badge nuevo'; badge.textContent='Nuevo ingreso'; if(diaEl) diaEl.textContent=''; return; }
   const parts = fechaRaw.split('-');
   const mIdx = parseInt(parts[1])-1;
   const dIdx = parseInt(parts[2])-1;
+  if(diaEl){
+    const DIAS_SEM = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const d = new Date(parseInt(parts[0]), mIdx, parseInt(parts[2]), 12);
+    diaEl.textContent = DIAS_SEM[d.getDay()];
+  }
   const v = allData[mIdx]?.v[dIdx] || 0;
   const c = allData[mIdx]?.c[dIdx] || 0;
-  const inV = document.getElementById('in-ventas');
   const inC = document.getElementById('in-cuentas');
   if(v>0){
-    inV.value = Math.round(v);
+    setMiles('in-ventas', v);
     inC.value = c>0 ? Math.round(c) : '';
     badge.className='estado-badge existe';
     badge.textContent='● Ya hay dato — editando';
   } else {
-    inV.value=''; inC.value='';
+    document.getElementById('in-ventas').value=''; inC.value='';
     badge.className='estado-badge nuevo';
     badge.textContent='Nuevo ingreso';
   }
@@ -1238,10 +1245,10 @@ function prefillSemana(w){
   const wd = st.w[w];
   const tot = wd ? (wd.liq||0)+(wd.sol||0)+(wd.otros||0)+(wd.rrhh||0) : 0;
   if(wd && tot>0){
-    document.getElementById('in-liq').value   = wd.liq   ? Math.round(wd.liq)   : '';
-    document.getElementById('in-sol').value   = wd.sol   ? Math.round(wd.sol)   : '';
-    document.getElementById('in-otros').value = wd.otros ? Math.round(wd.otros) : '';
-    document.getElementById('in-rrhh').value  = wd.rrhh  ? Math.round(wd.rrhh)  : '';
+    setMiles('in-liq',   wd.liq);
+    setMiles('in-sol',   wd.sol);
+    setMiles('in-otros', wd.otros);
+    setMiles('in-rrhh',  wd.rrhh);
     badge.className='estado-badge existe';
     badge.textContent='● Ya hay dato — editando';
   } else {
@@ -1273,6 +1280,29 @@ function navSem(delta){
   updateSemDates(w);
 }
 
+// ── Formato miles con puntos (estilo chileno) ──────────────────────────
+// Muestra "5.139.332" mientras se escribe · preserva posición del cursor.
+function fmtMiles(el){
+  const start = el.selectionStart;
+  const before = el.value;
+  const digits = before.replace(/\D/g,'');
+  const formatted = digits ? parseInt(digits,10).toLocaleString('es-CL') : '';
+  el.value = formatted;
+  // Reajusta cursor según diferencia de longitud (por los puntos añadidos)
+  const diff = formatted.length - before.length;
+  const pos = Math.max(0, start + diff);
+  try { el.setSelectionRange(pos, pos); } catch(e){}
+}
+// Extrae el número limpio de un campo con puntos · "5.139.332" → 5139332
+function parseMiles(id){
+  const raw = (document.getElementById(id).value||'').replace(/\D/g,'');
+  return raw ? parseInt(raw,10) : 0;
+}
+// Setea un campo con formato miles a partir de un número
+function setMiles(id, num){
+  document.getElementById(id).value = (num && num>0) ? Math.round(num).toLocaleString('es-CL') : '';
+}
+
 async function callSheets(params){
   const gsUrl = APPS_SCRIPT_URL + '?' + Object.entries(params).map(([k,v])=>k+'='+encodeURIComponent(v)).join('&');
   try{
@@ -1287,10 +1317,10 @@ async function callSheets(params){
 
 async function guardarSemana(){
   const w=parseInt(document.getElementById('in-sem').value);
-  const l=parseFloat(document.getElementById('in-liq').value)||0;
-  const s=parseFloat(document.getElementById('in-sol').value)||0;
-  const o=parseFloat(document.getElementById('in-otros').value)||0;
-  const r=parseFloat(document.getElementById('in-rrhh').value)||0;
+  const l=parseMiles('in-liq');
+  const s=parseMiles('in-sol');
+  const o=parseMiles('in-otros');
+  const r=parseMiles('in-rrhh');
   if(!w){alert('Ingresa el número de semana');return}
   st.w[w]={liq:l,sol:s,otros:o,rrhh:r}; render();
   const btns = document.querySelectorAll('#tab-input .btn');
