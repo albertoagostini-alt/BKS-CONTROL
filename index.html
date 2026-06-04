@@ -4,33 +4,42 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BKS Control 2026</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231a1d23'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' font-size='11' fill='white'>BKS</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b0c0f'/><text x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='system-ui,sans-serif' font-weight='700' font-size='11' fill='%23ff7a18'>BKS</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <style>
 :root {
-  --bg: #f5f6f8;
-  --bg2: #ffffff;
-  --bg3: #f0f1f4;
-  --border: rgba(0,0,0,0.07);
-  --border2: rgba(0,0,0,0.13);
-  --text: #1a1d23;
-  --text2: #4a5060;
-  --text3: #9098aa;
-  --green: #0a8a52;
-  --green-bg: rgba(10,138,82,0.08);
-  --yellow: #c47d0a;
-  --yellow-bg: rgba(196,125,10,0.08);
-  --red: #d63030;
-  --red-bg: rgba(214,48,48,0.08);
-  --blue: #1a6fd4;
-  --blue-bg: rgba(26,111,212,0.08);
+  --bg: #0b0c0f;
+  --bg2: #141619;
+  --bg3: #1c1f24;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.13);
+  --text: #f3f1ec;
+  --text2: #b3b0a8;
+  --text3: #74798a;
+  --green: #2ed47a;
+  --green-bg: rgba(46,212,122,0.10);
+  --yellow: #f5b541;
+  --yellow-bg: rgba(245,181,65,0.10);
+  --red: #ff5247;
+  --red-bg: rgba(255,82,71,0.10);
+  /* Accento neon arancio Sterlizia — sostituisce il blu corporate */
+  --blue: #ff7a18;
+  --blue-bg: rgba(255,122,24,0.10);
+  --accent: #ff7a18;
+  --accent-glow: rgba(255,122,24,0.45);
   --font: 'DM Sans', sans-serif;
   --mono: 'DM Mono', monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; min-height: 100vh; }
+body {
+  background-image:
+    radial-gradient(900px 500px at 78% -8%, rgba(255,122,24,0.07), transparent 60%),
+    radial-gradient(700px 500px at -5% 12%, rgba(170,40,180,0.06), transparent 55%);
+  background-attachment: fixed;
+}
 
 .shell { display: flex; min-height: 100vh; overflow-x: hidden; }
 .sidebar {
@@ -47,10 +56,10 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   margin-bottom: 6px;
   display: flex; align-items: center; gap: 10px;
 }
-.logo-icon { width: 30px; height: 30px; background: var(--text); border-radius: 7px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.logo-icon span { font-size: 9px; font-weight: 700; color: white; letter-spacing: .03em; font-family: var(--mono); }
+.logo-icon { width: 32px; height: 32px; background: linear-gradient(145deg, #1c1f24, #0b0c0f); border: 1px solid var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 10px var(--accent-glow), inset 0 0 6px rgba(255,122,24,0.15); }
+.logo-icon span { font-size: 9px; font-weight: 700; color: var(--accent); letter-spacing: .03em; font-family: var(--mono); text-shadow: 0 0 6px var(--accent-glow); }
 .logo-name { font-size: 14px; font-weight: 600; letter-spacing: .01em; color: var(--text); line-height: 1; }
-.logo-sub { font-size: 10px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+.logo-sub { font-size: 10px; color: var(--accent); margin-top: 2px; font-family: var(--mono); letter-spacing: .08em; }
 .nav-item {
   display: flex; align-items: center; gap: 10px;
   padding: 10px 20px; cursor: pointer; font-size: 13px;
@@ -58,7 +67,8 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   transition: all .15s; user-select: none;
 }
 .nav-item:hover { color: var(--text); background: var(--bg3); }
-.nav-item.active { color: var(--text); border-left-color: var(--blue); background: rgba(77,159,255,0.06); }
+.nav-item.active { color: var(--text); border-left-color: var(--accent); background: var(--blue-bg); }
+.nav-item.active .nav-icon { color: var(--accent); text-shadow: 0 0 8px var(--accent-glow); }
 .nav-icon { font-size: 15px; width: 18px; text-align: center; }
 .sync-info { margin-top: auto; padding: 14px 14px 18px; border-top: 1px solid var(--border); }
 .sync-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--text3); margin-right: 6px; }
@@ -88,11 +98,13 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
 
 @media (max-width: 600px) {
   .sidebar {
-    width: 100%; height: 56px; min-height: unset;
+    width: 100%; height: 60px; min-height: unset;
     top: auto; bottom: 0; left: 0; right: 0;
     flex-direction: row; border-right: none;
     border-top: 1px solid var(--border2);
-    box-shadow: 0 -2px 12px rgba(0,0,0,0.08);
+    background: rgba(13,14,17,0.92);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 -4px 24px rgba(0,0,0,0.5);
     z-index: 200;
   }
   .logo { display: none; }
@@ -102,7 +114,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
     margin: 0; border-radius: 0; flex: 1; text-align: center;
     justify-content: center; box-shadow: none !important;
   }
-  .nav-item.active { box-shadow: inset 0 2px 0 var(--blue) !important; background: var(--blue-bg); }
+  .nav-item.active { box-shadow: inset 0 2px 0 var(--accent) !important; background: var(--blue-bg); }
   .nav-icon { font-size: 18px; width: auto; }
   .sync-info { display: none; }
   .main { margin-left: 0; margin-bottom: 64px; padding: 16px 14px; overflow-x: hidden; }
@@ -130,7 +142,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   border-radius: 12px; padding: 16px 18px; position: relative; overflow: hidden;
   transition: box-shadow .15s;
 }
-.kpi:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+.kpi:hover { box-shadow: 0 2px 16px rgba(0,0,0,0.4), 0 0 0 1px var(--accent-glow); border-color: var(--accent-glow); }
 .kpi-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; }
 .kpi-val { font-size: 23px; font-weight: 600; color: var(--text); line-height: 1.1; letter-spacing: -.02em; }
 .kpi-sub { font-size: 11px; color: var(--text3); margin-top: 4px; }
@@ -206,7 +218,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   transition: all .15s; background: transparent;
 }
 .month-pill:hover { background: var(--bg3); color: var(--text2); }
-.month-pill.active { background: var(--blue); color: white; border-color: var(--blue); }
+.month-pill.active { background: var(--accent); color: #1a1205; border-color: var(--accent); font-weight: 600; box-shadow: 0 0 10px var(--accent-glow); }
 .month-pill.past { color: var(--text3); }
 
 .kpi-bar-wrap { height: 5px; background: var(--bg3); border-radius: 3px; margin: 8px 0; overflow: hidden; }
@@ -243,8 +255,8 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
   transition: border-color .15s;
 }
 .ir input:focus { outline: none; border-color: var(--blue); }
-.btn { padding: 9px 20px; font-size: 13px; cursor: pointer; border: none; border-radius: 6px; background: var(--blue); color: #fff; width: 100%; margin-top: 4px; font-family: var(--font); font-weight: 500; transition: background .15s; }
-.btn:hover { background: #3a8ff0; }
+.btn { padding: 10px 20px; font-size: 13px; cursor: pointer; border: none; border-radius: 8px; background: linear-gradient(135deg, #ff8a2b, #ff6a00); color: #1a1205; width: 100%; margin-top: 4px; font-family: var(--font); font-weight: 600; letter-spacing: .01em; transition: all .15s; box-shadow: 0 0 0 rgba(255,122,24,0); }
+.btn:hover { box-shadow: 0 0 16px var(--accent-glow); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -270,6 +282,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
       <span class="sync-time" id="sync-time">Conectando...</span>
     </div>
     <button class="sync-btn" onclick="cargarSheets()">↻ Actualizar</button>
+    <a href="menu_admin.html" class="sync-btn" style="display:block;text-align:center;text-decoration:none;margin-top:8px;border-color:var(--accent);color:var(--accent)">← Menú admin</a>
   </div>
 </aside>
 
@@ -300,7 +313,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(10,138,82,0.75)"></span>Ventas ≥ obj</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(214,48,48,0.65)"></span>Ventas &lt; obj</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:rgba(150,150,160,0.4)"></span>Mes anterior</span>
-        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(26,111,212,0.5)"></span>Objetivo</span>
+        <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(80,190,230,0.6)"></span>Objetivo</span>
         <span style="display:flex;align-items:center;gap:4px"><span style="display:inline-block;width:20px;height:2px;background:rgba(196,125,10,0.8)"></span>Prom/cuenta →</span>
       </div>
       <!-- Month nav pills -->
@@ -375,7 +388,7 @@ html, body { background: var(--bg); color: var(--text); font-family: var(--font)
       <div class="leg">
         <span class="leg-item"><span class="leg-line" style="background:#555a66"></span>2024</span>
         <span class="leg-item"><span class="leg-line" style="background:var(--yellow)"></span>2025</span>
-        <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed var(--blue)"></span>Presupuesto 2026</span>
+        <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(80,190,230,0.7)"></span>Presupuesto 2026</span>
         <span class="leg-item"><span class="leg-line" style="background:var(--green);height:3px"></span>Real 2026</span>
       </div>
       <div class="chart-wrap" style="height:240px"><canvas id="cAnual"></canvas></div>
@@ -746,7 +759,9 @@ function render(){
   const falta = PMES-totV;
 
   let caja3='';
-  if(proyeccion>=PMES){
+  if(totV<=0){
+    caja3=`<div class="pj"><div class="pj-lbl">Proyección</div><div class="pj-main" style="color:var(--text3)">Sin datos aún</div><div class="pj-sub">Ingresa ventas para ver la proyección</div></div>`;
+  } else if(proyeccion>=PMES){
     caja3=`<div class="pj"><div class="pj-lbl">Corrección necesaria</div><div class="pj-main" style="color:var(--green)">¡Vas bien!</div><div class="pj-sub">Ritmo suficiente para el objetivo</div></div>`;
   } else if(diasRestantes===0){
     caja3=`<div class="pj"><div class="pj-lbl">Resultado final</div><div class="pj-main" style="color:var(--red)">Mes cerrado</div><div class="pj-sub">Faltaron ${fmtM(falta)}</div></div>`;
@@ -895,7 +910,7 @@ function renderDiario() {
         {
           data: targets,
           type: 'line',
-          borderColor: 'rgba(26,111,212,0.5)',
+          borderColor: 'rgba(80,190,230,0.6)',
           borderWidth: 1.5,
           pointRadius: 0,
           fill: false,
@@ -929,16 +944,16 @@ function renderDiario() {
           callbacks: {
             label: c => c.datasetIndex===2 ? '$'+Math.round(c.raw/1000)+'k prom/cta' : c.raw ? fmtM(c.raw) : 'sin datos'
           },
-          backgroundColor: '#ffffff',
-          borderColor: 'rgba(0,0,0,0.1)',
+          backgroundColor: 'rgba(20,22,25,0.96)',
+          borderColor: 'rgba(255,122,24,0.4)',
           borderWidth: 1,
-          titleColor: '#1a1d23',
-          bodyColor: '#4a5060'
+          titleColor: '#f3f1ec',
+          bodyColor: '#b3b0a8'
         }
       },
       scales: {
-        x: { ticks: { color: '#9098aa', font: { size: 9 }, autoSkip: false, maxRotation: 60 }, grid: { color: 'rgba(0,0,0,0.05)' } },
-        y: { ticks: { callback: v => fmtM(v), color: '#9098aa', font: { size: 9 } }, grid: { color: 'rgba(0,0,0,0.06)' } },
+        x: { ticks: { color: '#9098aa', font: { size: 9 }, autoSkip: false, maxRotation: 60 }, grid: { color: 'rgba(255,255,255,0.06)' } },
+        y: { ticks: { callback: v => fmtM(v), color: '#9098aa', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.06)' } },
         y2: { position: 'right', ticks: { callback: v => '$'+Math.round(v/1000)+'k', color: 'rgba(196,125,10,0.7)', font: { size: 9 } }, grid: { display: false } }
       }
     }
@@ -1060,9 +1075,9 @@ function renderSemanas() {
     <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed #EF9F27"></span>Sólidos %</span>
     <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed #9C6FD6"></span>Otros %</span>
     <span class="leg-item"><span class="leg-line" style="background:#C42B2B;height:3px"></span>Total Costo %</span>
-    <span class="leg-item"><span class="leg-line" style="background:#378ADD;height:3px"></span>RRHH %</span>
+    <span class="leg-item"><span class="leg-line" style="background:#46b3e0;height:3px"></span>RRHH %</span>
     <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(196,43,43,0.4)"></span>Obj 25%</span>
-    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(55,138,221,0.4)"></span>Obj 22%</span>`;
+    <span class="leg-item"><span style="display:inline-block;width:20px;border-top:2px dashed rgba(70,179,224,0.45)"></span>Obj 22%</span>`;
 
   if(document.getElementById('cKpi')._ch) document.getElementById('cKpi')._ch.destroy();
   const ch = new Chart(document.getElementById('cKpi'),{type:'line',
@@ -1071,16 +1086,16 @@ function renderSemanas() {
       {label:'Sólidos %',  data:wPctSol,  borderColor:'#EF9F27',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:3,fill:false,tension:0.3,spanGaps:false},
       {label:'Otros %',    data:wPctOtros,borderColor:'#9C6FD6',backgroundColor:'transparent',borderWidth:1.5,borderDash:[4,3],pointRadius:3,fill:false,tension:0.3,spanGaps:false},
       {label:'Total Costo %',data:wPctC, borderColor:'#C42B2B',backgroundColor:'rgba(196,43,43,0.07)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:wPctC.map(p=>p===null?'transparent':p>25?'#C42B2B':'#0a7a48'),fill:true,tension:0.3,spanGaps:false},
-      {label:'RRHH %',     data:wPctR,    borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.05)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:wPctR.map(p=>p===null?'transparent':p>22?'#C42B2B':'#0a7a48'),fill:true,tension:0.3,spanGaps:false},
+      {label:'RRHH %',     data:wPctR,    borderColor:'#46b3e0',backgroundColor:'rgba(70,179,224,0.06)',borderWidth:2.5,pointRadius:5,pointBackgroundColor:wPctR.map(p=>p===null?'transparent':p>22?'#C42B2B':'#0a7a48'),fill:true,tension:0.3,spanGaps:false},
       {label:'Obj 25%',data:weeks.map(()=>25),borderColor:'rgba(196,43,43,0.4)', borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false},
-      {label:'Obj 22%',data:weeks.map(()=>22),borderColor:'rgba(55,138,221,0.4)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
+      {label:'Obj 22%',data:weeks.map(()=>22),borderColor:'rgba(70,179,224,0.45)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(20,22,25,0.96)',borderColor:'rgba(255,122,24,0.4)',borderWidth:1,callbacks:{
         label:c=>c.raw!=null?c.dataset.label+': '+c.raw+'%':'\u2014',
         afterBody:(items)=>{const idx=items[0]?.dataIndex;const tot=idx!=null?wPctC[idx]:null;return tot!=null?['─────','Total costo: '+tot+'%']:[];}
       }}},
-      scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
+      scales:{y:{min:0,max:45,ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(255,255,255,0.06)'}}}
     }
   });
   document.getElementById('cKpi')._ch = ch;
@@ -1116,12 +1131,12 @@ function renderAnual(){
     data:{labels:ms,datasets:[
       {label:'2024',data:r24,borderColor:'#444950',borderWidth:1.5,pointRadius:2,fill:false,tension:0.3},
       {label:'2025',data:r25,borderColor:'#f5a623',borderWidth:1.5,pointRadius:2,fill:false,tension:0.3},
-      {label:'Presupuesto 2026',data:presup2026,borderColor:'rgba(77,159,255,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.3},
+      {label:'Presupuesto 2026',data:presup2026,borderColor:'rgba(80,190,230,0.5)',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,tension:0.3},
       {label:'Real 2026',data:r26,borderColor:'#00c97a',borderWidth:2.5,pointRadius:5,pointBackgroundColor:'#00c97a',fill:false,tension:0.3,spanGaps:false}
     ]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+(c.raw!=null?fmtM(c.raw):'n/d')}}},
-      scales:{y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:10}},grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(20,22,25,0.96)',borderColor:'rgba(255,122,24,0.4)',borderWidth:1,callbacks:{label:c=>c.dataset.label+': '+(c.raw!=null?fmtM(c.raw):'n/d')}}},
+      scales:{y:{ticks:{callback:v=>fmtM(v),color:'#9098aa',font:{size:10}},grid:{color:'rgba(255,255,255,0.06)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(255,255,255,0.06)'}}}
     }
   });
   document.getElementById('cAnual')._ch = ca;
@@ -1131,8 +1146,8 @@ function renderAnual(){
   const cb = new Chart(document.getElementById('cPresup'),{type:'bar',
     data:{labels:ms,datasets:[{data:pb,backgroundColor:pb.map(p=>p==null?'rgba(255,255,255,0.04)':p>=100?'rgba(0,201,122,0.7)':p>=85?'rgba(245,166,35,0.7)':'rgba(255,77,77,0.65)'),borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'#ffffff',borderColor:'rgba(0,0,0,0.1)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.raw+'%':'n/d'}}},
-      scales:{y:{ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},min:0,max:130,grid:{color:'rgba(0,0,0,0.05)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(0,0,0,0.05)'}}}
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(20,22,25,0.96)',borderColor:'rgba(255,122,24,0.4)',borderWidth:1,callbacks:{label:c=>c.raw!=null?c.raw+'%':'n/d'}}},
+      scales:{y:{ticks:{callback:v=>v+'%',color:'#9098aa',font:{size:10}},min:0,max:130,grid:{color:'rgba(255,255,255,0.06)'}},x:{ticks:{color:'#9098aa',font:{size:11}},grid:{color:'rgba(255,255,255,0.06)'}}}
     }
   });
   document.getElementById('cPresup')._ch = cb;
